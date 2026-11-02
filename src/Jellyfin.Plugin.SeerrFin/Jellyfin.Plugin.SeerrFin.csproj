@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <Version>1.9.3.3</Version>
+        <Version>1.9.3.4</Version>
         <RootNamespace>Jellyfin.Plugin.SeerrFin</RootNamespace>
     </PropertyGroup>
 
@@ -21,6 +21,7 @@
     <ItemGroup>
         <EmbeddedResource Include="Configuration\config.html" />
         <EmbeddedResource Include="Inject\seerrfin-i18n.js" />
+        <EmbeddedResource Include="Inject\seerrfin-lean.js" />
         <EmbeddedResource Include="Inject\seerrfin-nativeui.js" />
         <EmbeddedResource Include="Inject\seerrfin-tabs.js" />
         <EmbeddedResource Include="Inject\seerrfin-tabs.css" />

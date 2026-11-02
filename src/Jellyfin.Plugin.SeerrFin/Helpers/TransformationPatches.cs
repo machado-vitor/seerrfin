@@ -121,7 +121,36 @@ public static class TransformationPatches
             + $"<script defer src=\"../SeerrFin/seerrfin-letterboxd.js{cacheParam}\"></script>"
             + $"<script defer src=\"../SeerrFin/seerrfin-watchlist.js{cacheParam}\"></script>";
 
-        return payload.Contents!.Replace("</head>", $"{cssLinks}</head>", StringComparison.Ordinal)
+        string leanRegex = (config.LeanClientUserAgentRegex ?? string.Empty).Trim();
+        string leanScript = string.Empty;
+        if (!string.IsNullOrEmpty(leanRegex))
+        {
+            // Inline and first in <head>: it must run before any deferred plugin script executes.
+            // Removing a deferred <script> from the document before its turn cancels it.
+            string template = string.Empty;
+            using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(SeerrFinPlugin).Namespace}.Inject.seerrfin-lean.js"))
+            {
+                if (stream != null)
+                {
+                    using var reader = new System.IO.StreamReader(stream);
+                    template = reader.ReadToEnd();
+                }
+            }
+            leanScript = "<script>" + template.Replace("__RE__", System.Text.Json.JsonSerializer.Serialize(leanRegex), StringComparison.Ordinal) + "</script>";
+        }
+
+        string html = payload.Contents!;
+        if (leanScript.Length > 0)
+        {
+            int headIdx = html.IndexOf("<head>", StringComparison.OrdinalIgnoreCase);
+            // The transformation regex also matches chunk files whose name contains "index-html"; only touch real HTML.
+            if (headIdx >= 0)
+            {
+                html = html.Insert(headIdx + "<head>".Length, leanScript);
+            }
+        }
+
+        return html.Replace("</head>", $"{cssLinks}</head>", StringComparison.Ordinal)
             .Replace("</body>", $"{scripts}</body>", StringComparison.Ordinal);
     }
 }

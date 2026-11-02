@@ -53,6 +53,14 @@ public class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public string DeviceDefaultsJson { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets a case-insensitive regex tested against navigator.userAgent. Matching clients
+    /// (typically smart TVs) get a lean web client: every plugin script/stylesheet injected into
+    /// index.html (SeerrFin included) and remote @import rules in the custom CSS are dropped before
+    /// they load. Empty disables the feature.
+    /// </summary>
+    public string LeanClientUserAgentRegex { get; set; } = string.Empty;
+
     public bool StreamingServiceUseImages { get; set; } = true;
 
     public bool StudioNetworkUseImages { get; set; } = true;

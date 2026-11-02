@@ -10,11 +10,11 @@ public class SeerrFinTabConfig
 
     public static List<SeerrFinTabConfig> CreateDefaults() =>
     [
-        new() { Id = "movies", Title = "Movies" },
-        new() { Id = "tv", Title = "TV Shows" },
-        new() { Id = "discover", Enabled = false, Title = "Discover" },
-        new() { Id = "requests", Title = "Requests" },
-        new() { Id = "watchlist", Title = "Watchlist" },
+        new() { Id = "movies", Title = "Filmes" },
+        new() { Id = "tv", Title = "Séries" },
+        new() { Id = "discover", Enabled = false, Title = "Descobrir" },
+        new() { Id = "requests", Title = "Solicitações" },
+        new() { Id = "watchlist", Title = "Minha lista" },
         new() { Id = "letterboxd", Title = "Letterboxd" }
     ];
 }

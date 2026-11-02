@@ -462,7 +462,7 @@ window.seerrFinLog = window.seerrFinLog || {
     }
 
     function getRequestButtonState(data, is4k) {
-        const defaultLabel = is4k ? 'Request 4K' : 'Request';
+        const defaultLabel = is4k ? window.seerrFinI18n.t('common.request4k') : window.seerrFinI18n.t('common.request');
         const info = data && data.mediaInfo;
         const raw = is4k ?
             (info && (info.status4k != null ? info.status4k : info.status4K)) ?? (data && data.status4k) :
@@ -478,13 +478,13 @@ window.seerrFinLog = window.seerrFinLog || {
         if (status === 4) { return { requested: false, label: defaultLabel }; }
 
         const labels = {
-            2: 'Pending',
-            3: 'Processing',
-            5: 'Available',
-            6: 'Blocklisted'
+            2: window.seerrFinI18n.t('modal.statusPending'),
+            3: window.seerrFinI18n.t('requests.statusProcessing'),
+            5: window.seerrFinI18n.t('requests.statusAvailable'),
+            6: window.seerrFinI18n.t('modal.statusBlocklisted')
         };
 
-        return { requested: true, label: labels[status] || 'Already requested' };
+        return { requested: true, label: labels[status] || window.seerrFinI18n.t('modal.alreadyRequested') };
     }
 
     function markRequestButton(is4k, label) {
@@ -495,7 +495,7 @@ window.seerrFinLog = window.seerrFinLog || {
         if (!btn) { return; }
 
         btn.disabled = true;
-        btn.textContent = label || 'Already requested';
+        btn.textContent = label || window.seerrFinI18n.t('modal.alreadyRequested');
     }
 
     function fetchJustWatchQualities(mediaId, mediaType) {
@@ -517,8 +517,8 @@ window.seerrFinLog = window.seerrFinLog || {
     function buildJustWatchQualityLines(mediaId, mediaType) {
         const qualityLines = mountFromHtml(`
             <div class="bst-sidebar-lines bst-sidebar-lines--qualities" hidden>
-                <div><span class="bst-label">Highest released quality:</span> <span class="bst-quality-value">…</span></div>
-                <div><span class="bst-label">Most common quality:</span> <span class="bst-quality-value">…</span></div>
+                <div><span class="bst-label">${escapeHtml(window.seerrFinI18n.t('modal.highestReleasedQuality'))}:</span> <span class="bst-quality-value">…</span></div>
+                <div><span class="bst-label">${escapeHtml(window.seerrFinI18n.t('modal.mostCommonQuality'))}:</span> <span class="bst-quality-value">…</span></div>
             </div>
         `);
 
@@ -530,9 +530,9 @@ window.seerrFinLog = window.seerrFinLog || {
 
             const values = qualityLines.querySelectorAll('.bst-quality-value');
             values[0].textContent =
-                result.highestReleasedQuality || result.HighestReleasedQuality || 'Unknown';
+                result.highestReleasedQuality || result.HighestReleasedQuality || window.seerrFinI18n.t('common.unknown');
             values[1].textContent =
-                result.mostCommonQuality || result.MostCommonQuality || 'Unknown';
+                result.mostCommonQuality || result.MostCommonQuality || window.seerrFinI18n.t('common.unknown');
             qualityLines.hidden = false;
         });
 
@@ -555,7 +555,7 @@ window.seerrFinLog = window.seerrFinLog || {
             })
             .catch(function (err) {
                 log.warn('Jellyfin item lookup failed for ' + itemId, err);
-                Dashboard.alert('Unable to open this item in Jellyfin');
+                Dashboard.alert(window.seerrFinI18n.t('modal.unableToOpenInJellyfin'));
             });
     }
 
@@ -746,18 +746,18 @@ window.seerrFinLog = window.seerrFinLog || {
         const rawStatus = is4k ? (mediaSeason.status4k != null ? mediaSeason.status4k : mediaSeason.status4K) : mediaSeason.status;
         const status = normalizeMediaStatus(rawStatus);
         const labels = {
-            2: 'Pending',
-            3: 'Requested',
-            4: 'Partially available',
-            5: 'Available',
-            6: 'Blocklisted'
+            2: window.seerrFinI18n.t('modal.statusPending'),
+            3: window.seerrFinI18n.t('letterboxd.statusRequested'),
+            4: window.seerrFinI18n.t('requests.statusPartiallyAvailable'),
+            5: window.seerrFinI18n.t('requests.statusAvailable'),
+            6: window.seerrFinI18n.t('modal.statusBlocklisted')
         };
 
         return labels[status] ? { status: status, label: labels[status] } : null;
     }
 
     function notifyUser(message) {
-        const text = String(message || 'Request failed');
+        const text = String(message || window.seerrFinI18n.t('modal.requestFailed'));
 
         if (activeDetailsRoot) {
             let notice = activeDetailsRoot.querySelector('[data-request-notice]');
@@ -818,7 +818,7 @@ window.seerrFinLog = window.seerrFinLog || {
         }).then(function (response) {
             // Seerr gives 202 with only a message when every selected season already exists in Seerr
             const apiMessage = response && response.errors && response.errors.length > 0 ?
-                'Request failed. Check logs for details.' :
+                window.seerrFinI18n.t('modal.requestFailedCheckLogs') :
                 (response && response.message && response.id == null ? String(response.message) : '');
 
             if (apiMessage) {
@@ -838,7 +838,7 @@ window.seerrFinLog = window.seerrFinLog || {
 
             // TV might still have more seasons to request (so don't lock the button)
             if (mediaType !== 'tv') {
-                markRequestButton(!!option.is4k, 'Already requested');
+                markRequestButton(!!option.is4k, window.seerrFinI18n.t('modal.alreadyRequested'));
             }
 
             if (typeof onSuccess === 'function') {
@@ -852,7 +852,7 @@ window.seerrFinLog = window.seerrFinLog || {
             if (err && err.status === 409) {
                 document.dispatchEvent(new Event('seerrfin-request-changed'));
                 if (mediaType !== 'tv') {
-                    markRequestButton(!!option.is4k, 'Already requested');
+                    markRequestButton(!!option.is4k, window.seerrFinI18n.t('modal.alreadyRequested'));
                 }
 
                 if (typeof onSuccess === 'function') {
@@ -873,15 +873,15 @@ window.seerrFinLog = window.seerrFinLog || {
                 messagePromise = reader.text().then(function (text) {
                     try {
                         const body = JSON.parse(text);
-                        return String(body.message || body.error || text || 'Request failed');
+                        return String(body.message || body.error || text || window.seerrFinI18n.t('modal.requestFailed'));
                     } catch (e) {
-                        return text || 'Request failed';
+                        return text || window.seerrFinI18n.t('modal.requestFailed');
                     }
-                }).catch(function () { return 'Request failed'; });
+                }).catch(function () { return window.seerrFinI18n.t('modal.requestFailed'); });
             } else if (err && typeof err.message === 'string' && err.message) {
                 messagePromise = Promise.resolve(err.message);
             } else {
-                messagePromise = Promise.resolve('Request failed');
+                messagePromise = Promise.resolve(window.seerrFinI18n.t('modal.requestFailed'));
             }
 
             return messagePromise.then(function (message) {
@@ -904,14 +904,14 @@ window.seerrFinLog = window.seerrFinLog || {
                 <div class="bst-quality-backdrop"></div>
                 <div class="bst-quality-panel" role="dialog" aria-modal="true">
                     <div class="bst-quality-header">
-                        <h3 id="bst-season-title">Select seasons</h3>
-                        <button type="button" class="bst-quality-close" aria-label="Close">${CLOSE_ICON}</button>
+                        <h3 id="bst-season-title">${escapeHtml(window.seerrFinI18n.t('modal.selectSeasons'))}</h3>
+                        <button type="button" class="bst-quality-close" aria-label="${escapeHtml(window.seerrFinI18n.t('modal.close'))}">${CLOSE_ICON}</button>
                     </div>
                     <div class="bst-quality-list">
-                        <div class="bst-quality-loading">Loading seasons…</div>
+                        <div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('modal.loadingSeasons'))}</div>
                     </div>
                     <div class="bst-quality-footer">
-                        <button type="button" class="bst-quality-continue" disabled>Continue</button>
+                        <button type="button" class="bst-quality-continue" disabled>${escapeHtml(window.seerrFinI18n.t('modal.continue'))}</button>
                     </div>
                 </div>
             </div>
@@ -923,11 +923,12 @@ window.seerrFinLog = window.seerrFinLog || {
         const rowsHtml = seasons.map(function (season) {
             const seasonNumber = season.seasonNumber;
             const requestState = getSeasonRequestState(details, seasonNumber, is4k);
-            const displayName = season.name && season.name !== `Season ${seasonNumber}` ?
+            const seasonLabel = window.seerrFinI18n.t('modal.seasonNumber', { number: seasonNumber });
+            const displayName = season.name && season.name !== seasonLabel ?
                 escapeHtml(season.name) :
-                `Season ${seasonNumber}`;
+                escapeHtml(seasonLabel);
             const episodesHtml = season.episodeCount ?
-                `<span class="bst-season-episodes"> (${season.episodeCount}${season.episodeCount === 1 ? ' episode' : ' episodes'})</span>` :
+                `<span class="bst-season-episodes"> (${escapeHtml(window.seerrFinI18n.t('modal.episodeCount', { count: season.episodeCount }))})</span>` :
                 '';
             const statusHtml = requestState ?
                 `<span class="bst-season-status">${escapeHtml(requestState.label)}</span>` :
@@ -945,7 +946,7 @@ window.seerrFinLog = window.seerrFinLog || {
         return `
             <label class="bst-season-option bst-season-select-all${hasRequestableSeasons ? '' : ' bst-season-option--unavailable'}">
                 <input type="checkbox" class="bst-season-checkbox" data-select-all-seasons${hasRequestableSeasons ? '' : ' disabled'} />
-                <span class="bst-season-label">Select all</span>
+                <span class="bst-season-label">${escapeHtml(window.seerrFinI18n.t('letterboxd.selectAll'))}</span>
             </label>
             ${rowsHtml}
         `;
@@ -1038,7 +1039,7 @@ window.seerrFinLog = window.seerrFinLog || {
             const seasons = getRequestableSeasons(details);
 
             if (!seasons.length) {
-                list.innerHTML = `<div class="bst-quality-empty">No seasons available.</div>`;
+                list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('modal.noSeasonsAvailable'))}</div>`;
                 continueBtn.disabled = true;
                 return;
             }
@@ -1047,31 +1048,31 @@ window.seerrFinLog = window.seerrFinLog || {
             bindSeasonList(activeSeasonRoot, seasons, details, is4k, ctx);
         }).catch(function (err) {
             log.error('seasons load failed', err);
-            list.innerHTML = `<div class="bst-quality-empty">Failed to load seasons.</div>`;
+            list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('modal.failedToLoadSeasons'))}</div>`;
             continueBtn.disabled = true;
         });
     }
 
     function renderQualityModalShell(is4k) {
-        const title = is4k ? 'Choose 4K quality profile' : 'Choose quality profile';
+        const title = is4k ? window.seerrFinI18n.t('modal.choose4kProfile') : window.seerrFinI18n.t('modal.chooseQualityProfile');
 
         return `
             <div class="bst-quality-wrapper">
                 <div class="bst-quality-backdrop"></div>
                 <div class="bst-quality-panel" role="dialog" aria-modal="true" aria-labelledby="bst-quality-title">
                     <div class="bst-quality-header">
-                        <h3 id="bst-quality-title">${title}</h3>
-                        <button type="button" class="bst-quality-close" aria-label="Close">${CLOSE_ICON}</button>
+                        <h3 id="bst-quality-title">${escapeHtml(title)}</h3>
+                        <button type="button" class="bst-quality-close" aria-label="${escapeHtml(window.seerrFinI18n.t('modal.close'))}">${CLOSE_ICON}</button>
                     </div>
                     <div class="bst-quality-list">
-                        <div class="bst-quality-loading">Loading profiles…</div>
+                        <div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('modal.loadingProfiles'))}</div>
                     </div>
                     <div class="bst-quality-footer" hidden>
                         <div class="bst-root-folder-field" hidden>
-                            <label for="bst-root-folder">Root folder</label>
+                            <label for="bst-root-folder">${escapeHtml(window.seerrFinI18n.t('modal.rootFolder'))}</label>
                             <select id="bst-root-folder" class="bst-root-folder-select"></select>
                         </div>
-                        <button type="button" class="bst-quality-continue" disabled>${is4k ? 'Request 4K' : 'Request'}</button>
+                        <button type="button" class="bst-quality-continue" disabled>${is4k ? escapeHtml(window.seerrFinI18n.t('common.request4k')) : escapeHtml(window.seerrFinI18n.t('common.request'))}</button>
                     </div>
                 </div>
             </div>
@@ -1083,7 +1084,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const orderedOptions = defaultOption ? [defaultOption].concat(options.filter(function (opt) { return opt !== defaultOption; })) : options;
 
         return orderedOptions.map(function (opt) {
-            const label = escapeHtml(opt.profileName || 'Default');
+            const label = escapeHtml(opt.profileName || window.seerrFinI18n.t('filters.default'));
             const subParts = [];
 
             if (opt.serverName) {
@@ -1091,7 +1092,7 @@ window.seerrFinLog = window.seerrFinLog || {
             }
 
             if (opt.is4k) {
-                subParts.push('4K');
+                subParts.push(window.seerrFinI18n.t('common.4kShort'));
             }
 
             const subHtml = subParts.length ? `<span class="bst-quality-option-sub">${escapeHtml(subParts.join(' · '))}</span>` : '';
@@ -1100,7 +1101,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 <label class="bst-quality-option">
                     <input type="radio" class="bst-quality-radio" name="bst-quality-profile"${opt === defaultOption || options.length === 1 ? ' checked' : ''}
                         data-server-id="${opt.serverId}" data-profile-id="${opt.profileId}" />
-                    <span>${label}${opt === defaultOption ? ' (Default)' : ''}${subHtml}</span>
+                    <span>${label}${opt === defaultOption ? ' (' + escapeHtml(window.seerrFinI18n.t('filters.default')) + ')' : ''}${subHtml}</span>
                 </label>
             `;
         }).join('');
@@ -1143,11 +1144,11 @@ window.seerrFinLog = window.seerrFinLog || {
 
         function failRequest(message) {
             if (!list || !activeQualityRoot || !list.isConnected) {
-                notifyUser(message || 'Request failed');
+                notifyUser(message || window.seerrFinI18n.t('modal.requestFailed'));
                 return;
             }
 
-            list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(message || 'Request failed')}</div>`;
+            list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(message || window.seerrFinI18n.t('modal.requestFailed'))}</div>`;
             footer.hidden = true;
             activeQualityRoot.style.display = '';
         }
@@ -1181,13 +1182,13 @@ window.seerrFinLog = window.seerrFinLog || {
             if (!allowed) {
                 closeQualityModal();
                 notifyUser(is4k ?
-                    'You do not have permission to make 4K requests.' :
-                    (mediaType === 'tv' ? 'You do not have permission to make series requests.' : 'You do not have permission to make movie requests.'));
+                    window.seerrFinI18n.t('modal.noPermission4k') :
+                    (mediaType === 'tv' ? window.seerrFinI18n.t('modal.noPermissionSeries') : window.seerrFinI18n.t('letterboxd.noPermissionToRequest')));
                 return;
             }
 
             if (!payload.canRequestAdvanced || !payload.options.length) {
-                list.innerHTML = `<div class="bst-quality-loading">Submitting request…</div>`;
+                list.innerHTML = `<div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('modal.submittingRequest'))}</div>`;
                 submitRequest(mediaId, mediaType, { is4k: is4k, seasons: selectedSeasons }, finishRequest, failRequest).catch(function () {});
                 return;
             }
@@ -1195,13 +1196,13 @@ window.seerrFinLog = window.seerrFinLog || {
             const filteredOptions = payload.options.filter(function (opt) { return !!opt.is4k === is4k; });
 
             if (!filteredOptions.length) {
-                failRequest(is4k ? 'No 4K quality profiles available.' : 'No quality profiles available.');
+                failRequest(is4k ? window.seerrFinI18n.t('modal.no4kProfilesAvailable') : window.seerrFinI18n.t('letterboxd.noQualityProfilesAvailable'));
                 return;
             }
 
             if (filteredOptions.length === 1 && (!getRequestModalAdvanced().showRootFolderSelector || filteredOptions[0].rootFolders.length <= 1)) {
                 const option = filteredOptions[0];
-                list.innerHTML = `<div class="bst-quality-loading">Submitting request…</div>`;
+                list.innerHTML = `<div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('modal.submittingRequest'))}</div>`;
                 submitRequest(mediaId, mediaType, {
                     serverId: option.serverId,
                     profileId: option.profileId,
@@ -1235,7 +1236,7 @@ window.seerrFinLog = window.seerrFinLog || {
                     rootFolderSelect.value = previousFolder || '';
 
                     if (!rootFolderSelect.value) {
-                        rootFolderSelect.add(new Option('Choose a root folder', '', true, true), 0);
+                        rootFolderSelect.add(new Option(window.seerrFinI18n.t('modal.chooseRootFolder'), '', true, true), 0);
                     }
                 }
 
@@ -1257,7 +1258,7 @@ window.seerrFinLog = window.seerrFinLog || {
 
                 requestBtn.disabled = true;
                 rootFolderSelect.disabled = true;
-                list.innerHTML = `<div class="bst-quality-loading">Submitting request…</div>`;
+                list.innerHTML = `<div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('modal.submittingRequest'))}</div>`;
                 submitRequest(mediaId, mediaType, {
                     serverId: selectedOption.serverId,
                     profileId: selectedOption.profileId,
@@ -1269,7 +1270,7 @@ window.seerrFinLog = window.seerrFinLog || {
             (list.querySelector('.bst-quality-radio:checked') || list.querySelector('.bst-quality-radio')).focus();
         }).catch(function (err) {
             log.error('profiles load failed', err);
-            failRequest('Failed to load quality profiles.');
+            failRequest(window.seerrFinI18n.t('letterboxd.failedToLoadQualityProfiles'));
         });
     }
 
@@ -1318,7 +1319,7 @@ window.seerrFinLog = window.seerrFinLog || {
     }
 
     function renderDetails(data, mediaId, mediaType) {
-        const title = data.title || data.name || 'Details';
+        const title = data.title || data.name || window.seerrFinI18n.t('modal.details');
         const overview = data.overview || '';
         const backdrop = resolveImageUrl(data.backdropUrl || data.backdrop_url || '') || tmdbImage(data.backdropPath || data.backdrop_path, 'original');
         const runtimeMinutes = data.runtime || (data.episodeRunTime && data.episodeRunTime[0]);
@@ -1338,9 +1339,9 @@ window.seerrFinLog = window.seerrFinLog || {
         // The play button takes over the "Available" wording, so the disabled Available button is dropped.
         // Other disabled states (Pending, Processing) still carry info and stay.
         const showPlay = !!data.jellyfinItemId;
-        const hideRequest = showPlay && requestState.requested && requestState.label === 'Available';
-        const hideRequest4k = showPlay && request4kState.requested && request4kState.label === 'Available';
-        const playLabel = (hideRequest || hideRequest4k) ? 'Available' : 'Partially available';
+        const hideRequest = showPlay && requestState.requested && requestState.label === window.seerrFinI18n.t('requests.statusAvailable');
+        const hideRequest4k = showPlay && request4kState.requested && request4kState.label === window.seerrFinI18n.t('requests.statusAvailable');
+        const playLabel = (hideRequest || hideRequest4k) ? window.seerrFinI18n.t('requests.statusAvailable') : window.seerrFinI18n.t('requests.statusPartiallyAvailable');
 
         return `
             <div class="bst-popout-wrapper">
@@ -1348,7 +1349,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 <div class="bst-popout-center">
                     <div class="bst-aether-card">
                         <div class="bst-aether-card-inner">
-                            <button type="button" class="bst-modal-close" aria-label="Close">${CLOSE_ICON}</button>
+                            <button type="button" class="bst-modal-close" aria-label="${escapeHtml(window.seerrFinI18n.t('modal.close'))}">${CLOSE_ICON}</button>
                             <div class="bst-modal-scroll">
                                 <div class="bst-modal-layout">
                                     <div class="bst-hero">
@@ -1372,9 +1373,9 @@ window.seerrFinLog = window.seerrFinLog || {
                                                 ${getRequestModalAdvanced().showRequest4kButton !== false && !hideRequest4k
                                                     ? `<button type="button" class="bst-btn-request-4k" data-action="request-4k"${request4kState.requested ? ' disabled' : ''}>${escapeHtml(request4kState.label)}</button>`
                                                     : ''}
-                                                <button type="button" class="bst-btn-watchlist" data-action="watchlist" aria-pressed="false" aria-label="Loading watchlist…" title="Loading watchlist…" disabled><span class="material-icons" aria-hidden="true">add</span></button>
+                                                <button type="button" class="bst-btn-watchlist" data-action="watchlist" aria-pressed="false" aria-label="${escapeHtml(window.seerrFinI18n.t('letterboxd.loadingWatchlist'))}" title="${escapeHtml(window.seerrFinI18n.t('letterboxd.loadingWatchlist'))}" disabled><span class="material-icons" aria-hidden="true">add</span></button>
                                                 ${trailerKey
-                                                    ? `<button type="button" class="bst-btn-trailer" data-action="trailer" data-trailer-key="${escapeHtml(trailerKey)}" aria-label="Trailer" title="Trailer"><span class="material-icons" aria-hidden="true">movie</span></button>`
+                                                    ? `<button type="button" class="bst-btn-trailer" data-action="trailer" data-trailer-key="${escapeHtml(trailerKey)}" aria-label="${escapeHtml(window.seerrFinI18n.t('modal.trailer'))}" title="${escapeHtml(window.seerrFinI18n.t('modal.trailer'))}"><span class="material-icons" aria-hidden="true">movie</span></button>`
                                                     : ''}
                                             </div>
                                         </div>
@@ -1387,23 +1388,23 @@ window.seerrFinLog = window.seerrFinLog || {
                                             </div>
                                             <div class="bst-sidebar" data-quality-slot>
                                                 <div class="bst-sidebar-lines">
-                                                    ${runtime ? `<div><span class="bst-label">Runtime:</span> ${escapeHtml(runtime)}${endsAt ? ` <span class="bst-runtime-sep">•</span> Ends at ${escapeHtml(endsAt)}` : ''}</div>` : ''}
-                                                    ${language ? `<div><span class="bst-label">Language:</span> ${escapeHtml(language)}</div>` : ''}
-                                                    ${releaseLabel ? `<div><span class="bst-label">Release Date:</span> ${escapeHtml(releaseLabel)}</div>` : ''}
-                                                    ${certification ? `<div><span class="bst-label">Rating:</span> ${escapeHtml(certification)}</div>` : ''}
+                                                    ${runtime ? `<div><span class="bst-label">${escapeHtml(window.seerrFinI18n.t('modal.runtime'))}:</span> ${escapeHtml(runtime)}${endsAt ? ` <span class="bst-runtime-sep">•</span> ${escapeHtml(window.seerrFinI18n.t('modal.endsAt', { time: endsAt }))}` : ''}</div>` : ''}
+                                                    ${language ? `<div><span class="bst-label">${escapeHtml(window.seerrFinI18n.t('modal.language'))}:</span> ${escapeHtml(language)}</div>` : ''}
+                                                    ${releaseLabel ? `<div><span class="bst-label">${escapeHtml(window.seerrFinI18n.t('modal.releaseDate'))}:</span> ${escapeHtml(releaseLabel)}</div>` : ''}
+                                                    ${certification ? `<div><span class="bst-label">${escapeHtml(window.seerrFinI18n.t('modal.rating'))}:</span> ${escapeHtml(certification)}</div>` : ''}
                                                     ${tmdbId ? `<div><span class="bst-label">ID:</span> ${escapeHtml(String(tmdbId))}</div>` : ''}
                                                 </div>
                                                 ${tmdbId || imdbId ? `
                                                     <div class="bst-external-links">
                                                         ${tmdbId ? `
                                                             <a class="bst-external-link tmdb" href="https://www.themoviedb.org/${mediaType === 'tv' ? 'tv' : 'movie'}/${tmdbId}"
-                                                                target="_blank" rel="noopener noreferrer" title="View on TMDB" style="animation-delay:60ms">
+                                                                target="_blank" rel="noopener noreferrer" title="${escapeHtml(window.seerrFinI18n.t('modal.viewOnTmdb'))}" style="animation-delay:60ms">
                                                                 ${TMDB_LOGO_SVG}
                                                             </a>
                                                         ` : ''}
                                                         ${imdbId ? `
                                                             <a class="bst-external-link imdb" href="https://www.imdb.com/title/${imdbId}"
-                                                                target="_blank" rel="noopener noreferrer" title="View on IMDb" style="animation-delay:120ms">
+                                                                target="_blank" rel="noopener noreferrer" title="${escapeHtml(window.seerrFinI18n.t('modal.viewOnImdb'))}" style="animation-delay:120ms">
                                                                 ${IMDB_ICON}
                                                             </a>
                                                         ` : ''}
@@ -1423,7 +1424,7 @@ window.seerrFinLog = window.seerrFinLog || {
     }
 
     function bindDetailsModal(root, data, mediaId, mediaType) {
-        const title = data.title || data.name || 'Details';
+        const title = data.title || data.name || window.seerrFinI18n.t('modal.details');
         const trailerKey = getTrailerKey(data);
         const tmdbId = data.id;
         root.querySelector('.bst-popout-backdrop').addEventListener('click', closeDetailsModal);
@@ -1460,23 +1461,23 @@ window.seerrFinLog = window.seerrFinLog || {
             watchlistLoaded = true;
             watchlistBtn.setAttribute('aria-pressed', String(watchlisted));
             watchlistBtn.querySelector('.material-icons').textContent = watchlisted ? 'check' : 'add';
-            watchlistBtn.setAttribute('aria-label', watchlisted ? 'Remove from watchlist' : 'Add to watchlist');
+            watchlistBtn.setAttribute('aria-label', watchlisted ? window.seerrFinI18n.t('modal.removeFromWatchlist') : window.seerrFinI18n.t('modal.addToWatchlist'));
             watchlistBtn.title = watchlistBtn.getAttribute('aria-label');
             watchlistBtn.disabled = false;
         }
 
         function loadWatchlistButton() {
             if (!window.seerrFinWatchlist) {
-                watchlistBtn.setAttribute('aria-label', 'Watchlist unavailable');
-                watchlistBtn.title = 'Watchlist unavailable';
+                watchlistBtn.setAttribute('aria-label', window.seerrFinI18n.t('modal.watchlistUnavailable'));
+                watchlistBtn.title = window.seerrFinI18n.t('modal.watchlistUnavailable');
                 return;
             }
 
             window.seerrFinWatchlist.get(mediaId, mediaType).then(updateWatchlistButton).catch(function () {
                 if (!root.isConnected || watchlistUserId !== ApiClient.getCurrentUserId()) return;
 
-                watchlistBtn.setAttribute('aria-label', 'Retry watchlist');
-                watchlistBtn.title = 'Retry watchlist';
+                watchlistBtn.setAttribute('aria-label', window.seerrFinI18n.t('modal.retryWatchlist'));
+                watchlistBtn.title = window.seerrFinI18n.t('modal.retryWatchlist');
                 watchlistBtn.disabled = false;
             });
         }
@@ -1491,13 +1492,13 @@ window.seerrFinLog = window.seerrFinLog || {
                 return;
             }
 
-            watchlistBtn.setAttribute('aria-label', watchlisted ? 'Removing…' : 'Adding…');
+            watchlistBtn.setAttribute('aria-label', watchlisted ? window.seerrFinI18n.t('modal.removingEllipsis') : window.seerrFinI18n.t('modal.addingEllipsis'));
             watchlistBtn.title = watchlistBtn.getAttribute('aria-label');
             window.seerrFinWatchlist.set(mediaId, mediaType, !watchlisted).then(updateWatchlistButton).catch(function (error) {
                 if (!root.isConnected || watchlistUserId !== ApiClient.getCurrentUserId()) return;
 
                 updateWatchlistButton({ watchlisted: watchlisted });
-                notifyUser(error?.responseJSON?.message || 'Unable to update watchlist. Please try again.');
+                notifyUser(error?.responseJSON?.message || window.seerrFinI18n.t('modal.watchlistUpdateError'));
             });
         });
         loadWatchlistButton();
@@ -1549,7 +1550,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 <div class="bst-popout-backdrop"></div>
                 <div class="bst-popout-center">
                     <div class="bst-aether-card">
-                        <div class="bst-modal-loading">Loading…</div>
+                        <div class="bst-modal-loading">${escapeHtml(window.seerrFinI18n.t('common.loadingEllipsis'))}</div>
                     </div>
                 </div>
             </div>
@@ -1590,7 +1591,7 @@ window.seerrFinLog = window.seerrFinLog || {
 
             log.error('details modal failed for ' + mediaType + '/' + mediaId, err);
             closeDetailsModal();
-            Dashboard.alert('Failed to load details');
+            Dashboard.alert(window.seerrFinI18n.t('modal.failedToLoadDetails'));
         });
     }
 

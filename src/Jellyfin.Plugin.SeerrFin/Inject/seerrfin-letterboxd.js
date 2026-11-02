@@ -136,11 +136,11 @@ window.seerrFinLog = window.seerrFinLog || {
     }
 
     function formatDate(value) {
-        if (!value) { return 'Never'; }
+        if (!value) { return window.seerrFinI18n.t('letterboxd.never'); }
 
         const date = new Date(value);
 
-        if (Number.isNaN(date.getTime())) { return 'Unknown'; }
+        if (Number.isNaN(date.getTime())) { return window.seerrFinI18n.t('common.unknown'); }
 
         return date.toLocaleString();
     }
@@ -148,7 +148,7 @@ window.seerrFinLog = window.seerrFinLog || {
     function getSyncButtonLabel() {
         if (state.syncing) { return state.syncProgressPercent + '%'; }
 
-        return state.items.length > 0 ? 'Refresh watchlist' : 'Get watchlist';
+        return state.items.length > 0 ? window.seerrFinI18n.t('letterboxd.refreshWatchlist') : window.seerrFinI18n.t('letterboxd.getWatchlist');
     }
 
     function updateSyncButton(container) {
@@ -261,11 +261,11 @@ window.seerrFinLog = window.seerrFinLog || {
     }
 
     function getBulkStatusLabel(status) {
-        if (status === 'requested') { return 'Requested'; }
-        if (status === 'skipped') { return 'Already requested'; }
-        if (status === 'failed') { return 'Failed'; }
+        if (status === 'requested') { return window.seerrFinI18n.t('letterboxd.statusRequested'); }
+        if (status === 'skipped') { return window.seerrFinI18n.t('letterboxd.statusAlreadyRequested'); }
+        if (status === 'failed') { return window.seerrFinI18n.t('requests.statusFailed'); }
 
-        return 'Waiting';
+        return window.seerrFinI18n.t('letterboxd.statusWaiting');
     }
 
     function setBulkModalLocked(locked) {
@@ -289,18 +289,18 @@ window.seerrFinLog = window.seerrFinLog || {
         const header = panel.querySelector('.bst-quality-header h3');
 
         if (header) {
-            header.textContent = 'Requesting movies';
+            header.textContent = window.seerrFinI18n.t('letterboxd.requestingMovies');
         }
 
         setBulkModalLocked(true);
         let subtitle = '';
 
         if (payload.QualityMode === 'singleProfile' && payload.ProfileName) {
-            subtitle = 'Profile: ' + payload.ProfileName;
+            subtitle = window.seerrFinI18n.t('letterboxd.profileLabel', { profile: payload.ProfileName });
         } else if (payload.QualityMode === 'highestAvailable') {
-            subtitle = 'Using highest released quality for each movie';
+            subtitle = window.seerrFinI18n.t('letterboxd.usingHighestQuality');
         } else if (payload.QualityMode === 'mostCommon') {
-            subtitle = 'Using most common quality for each movie';
+            subtitle = window.seerrFinI18n.t('letterboxd.usingMostCommonQuality');
         }
 
         const list = panel.querySelector('.bst-quality-list');
@@ -321,10 +321,10 @@ window.seerrFinLog = window.seerrFinLog || {
             return `
                 <div class="bst-letterboxd-bulk-item" data-bulk-item data-tmdb-id="${id}">
                     <div class="bst-letterboxd-bulk-item-main">
-                        <span class="bst-letterboxd-bulk-item-title">${escapeHtml(getItemTitle(id) || 'Movie')}</span>
+                        <span class="bst-letterboxd-bulk-item-title">${escapeHtml(getItemTitle(id) || window.seerrFinI18n.t('account.movieSingular'))}</span>
                         <span class="bst-letterboxd-bulk-item-quality" data-bulk-quality></span>
                     </div>
-                    <span class="bst-letterboxd-bulk-item-status" data-bulk-status>Waiting</span>
+                    <span class="bst-letterboxd-bulk-item-status" data-bulk-status>${escapeHtml(window.seerrFinI18n.t('letterboxd.statusWaiting'))}</span>
                 </div>
             `;
         }).join('');
@@ -335,10 +335,10 @@ window.seerrFinLog = window.seerrFinLog || {
                 <div class="bst-letterboxd-bulk-progress-track">
                     <div class="bst-letterboxd-bulk-progress-fill" data-bulk-progress-fill style="width:0%"></div>
                 </div>
-                <span class="bst-letterboxd-bulk-progress-count" data-bulk-progress-count>0 of ${tmdbIds.length}</span>
+                <span class="bst-letterboxd-bulk-progress-count" data-bulk-progress-count>${escapeHtml(window.seerrFinI18n.t('letterboxd.countOfTotal', { done: 0, total: tmdbIds.length }))}</span>
             </div>
             <div class="bst-letterboxd-bulk-items" data-bulk-items>${itemsHtml}</div>
-            <button type="button" class="bst-quality-option bst-letterboxd-bulk-done" data-bulk-footer data-bulk-done hidden>Done</button>`;
+            <button type="button" class="bst-quality-option bst-letterboxd-bulk-done" data-bulk-footer data-bulk-done hidden>${escapeHtml(window.seerrFinI18n.t('letterboxd.done'))}</button>`;
     }
 
     function updateBulkItemRow(panel, item) {
@@ -386,15 +386,15 @@ window.seerrFinLog = window.seerrFinLog || {
         const countEl = panel.querySelector('[data-bulk-progress-count]');
 
         if (countEl) {
-            countEl.textContent = done + ' of ' + total;
+            countEl.textContent = window.seerrFinI18n.t('letterboxd.countOfTotal', { done: done, total: total });
         }
 
         panel.querySelectorAll('[data-bulk-item].is-active').forEach(function (row) {
             row.classList.remove('is-active');
             const statusEl = row.querySelector('[data-bulk-status]');
 
-            if (statusEl && statusEl.textContent === 'Requesting…') {
-                statusEl.textContent = 'Waiting';
+            if (statusEl && statusEl.textContent === window.seerrFinI18n.t('letterboxd.requestingEllipsis')) {
+                statusEl.textContent = window.seerrFinI18n.t('letterboxd.statusWaiting');
             }
         });
 
@@ -423,7 +423,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 const statusEl = row.querySelector('[data-bulk-status]');
 
                 if (statusEl) {
-                    statusEl.textContent = 'Requesting…';
+                    statusEl.textContent = window.seerrFinI18n.t('letterboxd.requestingEllipsis');
                 }
             }
         }
@@ -433,7 +433,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const header = panel.querySelector('.bst-quality-header h3');
 
         if (header) {
-            header.textContent = 'Requests complete';
+            header.textContent = window.seerrFinI18n.t('letterboxd.requestsComplete');
         }
 
         setBulkModalLocked(false);
@@ -455,7 +455,7 @@ window.seerrFinLog = window.seerrFinLog || {
         }
 
         if (subtitle) {
-            subtitle.textContent = `Requested: ${requested}, skipped: ${skipped}, failed: ${failed}`;
+            subtitle.textContent = window.seerrFinI18n.t('letterboxd.requestSummary', { requested: requested, skipped: skipped, failed: failed });
         }
 
         const footer = panel.querySelector('[data-bulk-footer]');
@@ -469,7 +469,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const header = panel.querySelector('.bst-quality-header h3');
 
         if (header) {
-            header.textContent = 'Request failed';
+            header.textContent = window.seerrFinI18n.t('letterboxd.requestFailed');
         }
 
         setBulkModalLocked(false);
@@ -607,14 +607,14 @@ window.seerrFinLog = window.seerrFinLog || {
         let metaHtml = '';
 
         if (state.syncing) {
-            metaHtml = `<div class="seerrfin-loading-row">Loading watchlist…</div>`;
+            metaHtml = `<div class="seerrfin-loading-row">${escapeHtml(window.seerrFinI18n.t('letterboxd.loadingWatchlist'))}</div>`;
         } else if (lastSynced || hasWatchlist) {
-            const unresolvedHtml = unresolvedCount ? `<span>Unresolved: <strong>${escapeHtml(String(unresolvedCount))}</strong></span>` : '';
+            const unresolvedHtml = unresolvedCount ? `<span>${escapeHtml(window.seerrFinI18n.t('letterboxd.unresolvedLabel'))}: <strong>${escapeHtml(String(unresolvedCount))}</strong></span>` : '';
 
             metaHtml = `
                 <div class="seerrfin-letterboxd-meta">
-                    <span>Last synced: <strong>${escapeHtml(formatDate(lastSynced))}</strong></span>
-                    <span>Gotten: <strong>${escapeHtml(String(resolvedCount))}</strong></span>
+                    <span>${escapeHtml(window.seerrFinI18n.t('letterboxd.lastSynced'))}: <strong>${escapeHtml(formatDate(lastSynced))}</strong></span>
+                    <span>${escapeHtml(window.seerrFinI18n.t('letterboxd.gotten'))}: <strong>${escapeHtml(String(resolvedCount))}</strong></span>
                     ${unresolvedHtml}
                 </div>
             `;
@@ -623,36 +623,36 @@ window.seerrFinLog = window.seerrFinLog || {
         const toolbarHtml = showToolbar ? `
             <div class="seerrfin-letterboxd-toolbar">
                 <div class="seerrfin-letterboxd-toolbar-actions">
-                    <button type="button" class="seerrfin-letterboxd-toolbar-btn" data-select-all>Select all</button>
-                    <button type="button" class="seerrfin-letterboxd-toolbar-btn" data-select-none>Select none</button>
+                    <button type="button" class="seerrfin-letterboxd-toolbar-btn" data-select-all>${escapeHtml(window.seerrFinI18n.t('letterboxd.selectAll'))}</button>
+                    <button type="button" class="seerrfin-letterboxd-toolbar-btn" data-select-none>${escapeHtml(window.seerrFinI18n.t('letterboxd.selectNone'))}</button>
                 </div>
                 <span class="seerrfin-letterboxd-toolbar-separator" aria-hidden="true"></span>
-                <span class="seerrfin-letterboxd-selected-count" data-selected-count>${selectedCount} selected</span>
+                <span class="seerrfin-letterboxd-selected-count" data-selected-count>${escapeHtml(window.seerrFinI18n.t('letterboxd.selectedCount', { count: selectedCount }))}</span>
             </div>
         ` : '';
 
         const actionbarHtml = showToolbar ? `
             <div class="seerrfin-letterboxd-actionbar${state.requesting ? ' seerrfin-letterboxd-disabled' : ''}">
-                <button type="button" data-request-selected${selectedCount === 0 || state.requesting ? ' disabled' : ''}>Request selected</button>
+                <button type="button" data-request-selected${selectedCount === 0 || state.requesting ? ' disabled' : ''}>${escapeHtml(window.seerrFinI18n.t('letterboxd.requestSelected'))}</button>
             </div>
         ` : '';
 
         return `
             <div class="verticalSection seerrfin-letterboxd-panel padded-left padded-right">
                 <div class="sectionTitleContainer sectionTitleContainer-cards">
-                    <h2 class="sectionTitle sectionTitle-cards">Letterboxd Watchlist</h2>
+                    <h2 class="sectionTitle sectionTitle-cards">${escapeHtml(window.seerrFinI18n.t('letterboxd.title'))}</h2>
                 </div>
                 <div class="seerrfin-letterboxd-header">
                     <form data-letterboxd-form>
                         <div>
-                            <label for="seerrfin-letterboxd-username">Letterboxd username</label>
+                            <label for="seerrfin-letterboxd-username">${escapeHtml(window.seerrFinI18n.t('letterboxd.usernameLabel'))}</label>
                             <input id="seerrfin-letterboxd-username" type="text" autocomplete="username"
                                 placeholder="your-letterboxd-username" value="${escapeHtml(state.username)}"${disabledAttr} />
                         </div>
                         <button type="submit" data-sync-submit${disabledAttr}>${escapeHtml(getSyncButtonLabel())}</button>
                     </form>
                 </div>
-                <div class="seerrfin-letterboxd-help">Public Letterboxd watchlists only. Enter your username, get watchlist, select movies, then request them in bulk.</div>
+                <div class="seerrfin-letterboxd-help">${escapeHtml(window.seerrFinI18n.t('letterboxd.helpText'))}</div>
                 ${errorHtml}
                 ${metaHtml}
                 ${toolbarHtml}
@@ -694,7 +694,7 @@ window.seerrFinLog = window.seerrFinLog || {
 
         if (!plugin || typeof plugin.createDiscoverCards !== 'function') {
             body.innerHTML = '';
-            updatePanelErrorBar(container, 'Plugin cards are not ready yet.');
+            updatePanelErrorBar(container, window.seerrFinI18n.t('letterboxd.pluginCardsNotReady'));
             return;
         }
 
@@ -755,7 +755,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const countEl = container.querySelector('[data-selected-count]');
 
         if (countEl) {
-            countEl.textContent = selectedCount + ' selected';
+            countEl.textContent = window.seerrFinI18n.t('letterboxd.selectedCount', { count: selectedCount });
         }
 
         const requestBtn = container.querySelector('[data-request-selected]');
@@ -803,7 +803,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const username = input ? input.value.trim() : state.username.trim();
 
         if (!validateUsername(username)) {
-            state.syncMeta = Object.assign({}, state.syncMeta || {}, { lastError: 'Enter a valid Letterboxd username.' });
+            state.syncMeta = Object.assign({}, state.syncMeta || {}, { lastError: window.seerrFinI18n.t('letterboxd.invalidUsername') });
             updatePanelErrorBar(container, state.syncMeta.lastError);
             return;
         }
@@ -818,7 +818,7 @@ window.seerrFinLog = window.seerrFinLog || {
         syncWatchlist(username).then(function () { state.selectedIds.clear(); })
             .catch(function (err) {
                 log.error('Letterboxd sync failed', err);
-                const message = err?.responseJSON?.message || 'Could not sync Letterboxd watchlist.';
+                const message = err?.responseJSON?.message || window.seerrFinI18n.t('letterboxd.syncError');
                 state.syncMeta = Object.assign({}, state.syncMeta || {}, { lastError: message });
             })
             .finally(function () {
@@ -843,7 +843,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 <div class="bst-quality-panel" role="dialog" aria-modal="true">
                     <div class="bst-quality-header">
                         <h3>${escapeHtml(title)}</h3>
-                        <button type="button" class="bst-quality-close" aria-label="Close">&times;</button>
+                        <button type="button" class="bst-quality-close" aria-label="${escapeHtml(window.seerrFinI18n.t('modal.close'))}">&times;</button>
                     </div>
                     <div class="bst-quality-list"></div>
                 </div>
@@ -898,16 +898,16 @@ window.seerrFinLog = window.seerrFinLog || {
     function renderQualitySelection() {
         return `
             <button type="button" class="bst-quality-option" data-quality-mode="singleProfile">
-                Use one quality profile for all
-                <span class="bst-quality-option-sub">Choose a single Radarr profile for every selected movie.</span>
+                ${escapeHtml(window.seerrFinI18n.t('letterboxd.useOneProfile'))}
+                <span class="bst-quality-option-sub">${escapeHtml(window.seerrFinI18n.t('letterboxd.useOneProfileSub'))}</span>
             </button>
             <button type="button" class="bst-quality-option" data-quality-mode="highestAvailable">
-                Highest quality for each
-                <span class="bst-quality-option-sub">Use the highest released streaming quality recommendation per movie.</span>
+                ${escapeHtml(window.seerrFinI18n.t('letterboxd.highestQuality'))}
+                <span class="bst-quality-option-sub">${escapeHtml(window.seerrFinI18n.t('letterboxd.highestQualitySub'))}</span>
             </button>
             <button type="button" class="bst-quality-option" data-quality-mode="mostCommon">
-                Most common quality for each
-                <span class="bst-quality-option-sub">Use the most common streaming quality recommendation per movie.</span>
+                ${escapeHtml(window.seerrFinI18n.t('letterboxd.mostCommonQuality'))}
+                <span class="bst-quality-option-sub">${escapeHtml(window.seerrFinI18n.t('letterboxd.mostCommonQualitySub'))}</span>
             </button>
             <div data-profile-list hidden></div>
         `;
@@ -920,7 +920,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const header = panel.querySelector('.bst-quality-header h3');
 
         if (header) {
-            header.textContent = 'Request selected movies';
+            header.textContent = window.seerrFinI18n.t('letterboxd.requestSelectedMovies');
         }
 
         const list = panel.querySelector('.bst-quality-list');
@@ -950,35 +950,33 @@ window.seerrFinLog = window.seerrFinLog || {
     function renderAlreadyRequestedPrompt(alreadyRequestedIds, selectedIds) {
         const count = alreadyRequestedIds.length;
         const total = selectedIds.length;
-        const movieWord = count === 1 ? 'movie already has a request' : 'movies already have requests';
         const remaining = total - count;
-        const remainingWord = remaining === 1 ? 'movie' : 'movies';
 
         const itemsHtml = alreadyRequestedIds.map(function (id) {
             return `
                 <div class="bst-letterboxd-bulk-item is-skipped">
                     <div class="bst-letterboxd-bulk-item-main">
-                        <span class="bst-letterboxd-bulk-item-title">${escapeHtml(getItemTitle(id) || 'Movie')}</span>
+                        <span class="bst-letterboxd-bulk-item-title">${escapeHtml(getItemTitle(id) || window.seerrFinI18n.t('account.movieSingular'))}</span>
                     </div>
-                    <span class="bst-letterboxd-bulk-item-status">Already requested</span>
+                    <span class="bst-letterboxd-bulk-item-status">${escapeHtml(window.seerrFinI18n.t('letterboxd.statusAlreadyRequested'))}</span>
                 </div>
             `;
         }).join('');
 
         return `
             <div class="bst-letterboxd-bulk-subtitle">
-                ${escapeHtml(`${count} of ${total} selected ${movieWord}.`)}
+                ${escapeHtml(window.seerrFinI18n.t('letterboxd.alreadyHaveRequests', { count: count, total: total }))}
             </div>
             <div class="bst-letterboxd-bulk-items bst-letterboxd-bulk-items--prompt">${itemsHtml}</div>
             <button type="button" class="bst-quality-option" data-skip-requested>
-                Skip them and continue
-                <span class="bst-quality-option-sub">Request only the ${remaining} remaining ${remainingWord}.</span>
+                ${escapeHtml(window.seerrFinI18n.t('letterboxd.skipAndContinue'))}
+                <span class="bst-quality-option-sub">${escapeHtml(window.seerrFinI18n.t('letterboxd.requestOnlyRemaining', { remaining: remaining }))}</span>
             </button>
             <button type="button" class="bst-quality-option" data-request-all>
-                Request all anyway
-                <span class="bst-quality-option-sub">Include already requested movies in this batch.</span>
+                ${escapeHtml(window.seerrFinI18n.t('letterboxd.requestAllAnyway'))}
+                <span class="bst-quality-option-sub">${escapeHtml(window.seerrFinI18n.t('letterboxd.includeAlreadyRequested'))}</span>
             </button>
-            <button type="button" class="bst-quality-option bst-letterboxd-bulk-cancel" data-cancel-request>Cancel</button>
+            <button type="button" class="bst-quality-option bst-letterboxd-bulk-cancel" data-cancel-request>${escapeHtml(window.seerrFinI18n.t('common.cancel'))}</button>
         `;
     }
 
@@ -986,7 +984,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const header = panel.querySelector('.bst-quality-header h3');
 
         if (header) {
-            header.textContent = 'Already requested';
+            header.textContent = window.seerrFinI18n.t('letterboxd.statusAlreadyRequested');
         }
 
         const list = panel.querySelector('.bst-quality-list');
@@ -1003,7 +1001,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 updateSelectionUi(container);
 
                 if (!remaining.length) {
-                    list.innerHTML = `<div class="bst-quality-empty">No movies left to request.</div>`;
+                    list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('letterboxd.noMoviesLeft'))}</div>`;
                     return;
                 }
 
@@ -1051,7 +1049,7 @@ window.seerrFinLog = window.seerrFinLog || {
             const payload = normalizeRequestOptionsPayload(data);
 
             if (!payload.canRequest) {
-                showBulkRequestError(panel, 'You do not have permission to make movie requests.');
+                showBulkRequestError(panel, window.seerrFinI18n.t('letterboxd.noPermissionToRequest'));
                 return;
             }
 
@@ -1071,7 +1069,7 @@ window.seerrFinLog = window.seerrFinLog || {
             showQualitySelection(panel, container, tmdbIds);
         }).catch(function (err) {
             log.error('Letterboxd request options failed', err);
-            showBulkRequestError(panel, 'Could not load request options.');
+            showBulkRequestError(panel, window.seerrFinI18n.t('letterboxd.couldNotLoadRequestOptions'));
         });
     }
 
@@ -1092,7 +1090,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 const list = panel.querySelector('.bst-quality-list');
 
                 if (list) {
-                    list.innerHTML = `<div class="bst-quality-empty">No movies left to request.</div>`;
+                    list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('letterboxd.noMoviesLeft'))}</div>`;
                 }
 
                 return;
@@ -1111,11 +1109,11 @@ window.seerrFinLog = window.seerrFinLog || {
 
         if (!selectedIds.length) { return; }
 
-        const panel = createBulkModalShell('Checking selections…');
+        const panel = createBulkModalShell(window.seerrFinI18n.t('letterboxd.checkingSelections'));
         const list = panel.querySelector('.bst-quality-list');
 
         if (list) {
-            list.innerHTML = `<div class="bst-quality-loading">Checking for existing requests…</div>`;
+            list.innerHTML = `<div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('letterboxd.checkingExistingRequests'))}</div>`;
         }
 
         checkAlreadyRequested(selectedIds)
@@ -1131,14 +1129,14 @@ window.seerrFinLog = window.seerrFinLog || {
                 log.error('Letterboxd request check failed', err);
 
                 if (list) {
-                    list.innerHTML = `<div class="bst-quality-empty">Could not check existing requests.</div>`;
+                    list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('letterboxd.couldNotCheckExistingRequests'))}</div>`;
                 }
             });
     }
 
     function renderProfileOptions(options) {
         return options.map(function (opt) {
-            const label = escapeHtml(opt.profileName || 'Default');
+            const label = escapeHtml(opt.profileName || window.seerrFinI18n.t('filters.default'));
             const subParts = [];
 
             if (opt.serverName) {
@@ -1146,7 +1144,7 @@ window.seerrFinLog = window.seerrFinLog || {
             }
 
             if (opt.is4k) {
-                subParts.push('4K');
+                subParts.push(window.seerrFinI18n.t('common.4kShort'));
             }
 
             const subHtml = subParts.length ? `<span class="bst-quality-option-sub">${escapeHtml(subParts.join(' · '))}</span>` : '';
@@ -1168,13 +1166,13 @@ window.seerrFinLog = window.seerrFinLog || {
         if (!list) { return; }
 
         list.hidden = false;
-        list.innerHTML = `<div class="bst-quality-loading">Loading profiles…</div>`;
+        list.innerHTML = `<div class="bst-quality-loading">${escapeHtml(window.seerrFinI18n.t('letterboxd.loadingProfiles'))}</div>`;
 
         ApiClient.ajax({ url: ApiClient.getUrl('SeerrFin/request-options/movie'), type: 'GET', dataType: 'json' }).then(function (data) {
             const payload = normalizeRequestOptionsPayload(data);
 
             if (!payload.canRequestAdvanced || !payload.options.length) {
-                list.innerHTML = `<div class="bst-quality-empty">No quality profiles available.</div>`;
+                list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('letterboxd.noQualityProfilesAvailable'))}</div>`;
                 return;
             }
 
@@ -1198,7 +1196,7 @@ window.seerrFinLog = window.seerrFinLog || {
             });
         }).catch(function (err) {
             log.error('Letterboxd profiles load failed', err);
-            list.innerHTML = `<div class="bst-quality-empty">Failed to load quality profiles.</div>`;
+            list.innerHTML = `<div class="bst-quality-empty">${escapeHtml(window.seerrFinI18n.t('letterboxd.failedToLoadQualityProfiles'))}</div>`;
         });
     }
 
@@ -1225,7 +1223,7 @@ window.seerrFinLog = window.seerrFinLog || {
             showBulkRequestComplete(panel, requested, skipped, failed);
         }).catch(function (err) {
             log.error('Letterboxd bulk request failed', err);
-            showBulkRequestError(panel, err?.responseJSON?.message || 'Bulk request failed.');
+            showBulkRequestError(panel, err?.responseJSON?.message || window.seerrFinI18n.t('letterboxd.requestError'));
         }).finally(function () {
             stopRequestProgressPolling();
             setRequestingUi(container, false);

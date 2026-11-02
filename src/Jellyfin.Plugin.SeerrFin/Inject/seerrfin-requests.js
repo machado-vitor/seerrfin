@@ -30,11 +30,11 @@ window.seerrFinLog = window.seerrFinLog || {
     const RADARR_LOGO = '<svg width="1.45em" height="1.45em" viewBox="0 0 1024 1024" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g id="Simple-Logo-Light"><g id="Group-Copy" transform="translate(70 21.00012)"><path d="M105.302 154.943L112.824 869.492C52.651 877.014 7.52158 846.927 7.52158 786.755L0 192.55C0 4.51106 172.996 -40.6184 278.298 34.5974L812.33 342.982C887.546 395.633 902.589 493.413 864.981 561.107C857.46 508.456 834.895 478.37 789.765 448.284L188.039 109.813C142.91 79.7268 105.302 87.2484 105.302 154.943Z" id="Shape" fill="#24292E" stroke="none" /><path d="M0 376.079C45.1295 391.122 90.259 383.6 127.867 361.036L744.636 0C782.244 52.651 774.723 105.302 729.593 135.388L210.604 436.251C135.388 473.859 37.6079 436.251 0 376.079Z" transform="translate(60.17249 531.0214)" id="Shape" fill="#24292E" stroke="none" /><path d="M0 413.687L368.557 203.083L7.52157 0L0 413.687Z" transform="translate(240.6902 282.8092)" id="Shape" fill="#FFC230" stroke="none" /></g></g></svg>';
     const SONARR_LOGO = '<svg height="1.45em" viewBox="0 0 216.7 216.9" width="1.45em" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M216.7 108.45c0 29.833-10.533 55.4-31.6 76.7-.7.833-1.483 1.6-2.35 2.3-3.466 3.4-7.133 6.484-11 9.25-18.267 13.467-39.367 20.2-63.3 20.2-23.967 0-45.033-6.733-63.2-20.2-4.8-3.4-9.3-7.25-13.5-11.55-16.367-16.266-26.417-35.167-30.15-56.7-.733-4.2-1.217-8.467-1.45-12.8-.1-2.4-.15-4.8-.15-7.2 0-2.533.05-4.95.15-7.25 0-.233.066-.467.2-.7 1.567-26.6 12.033-49.583 31.4-68.95C53.05 10.517 78.617 0 108.45 0c29.933 0 55.484 10.517 76.65 31.55 21.067 21.433 31.6 47.067 31.6 76.9z" fill="#EEE" fill-rule="evenodd"/><path clip-rule="evenodd" d="M194.65 42.5l-22.4 22.4C159.152 77.998 158 89.4 158 109.5c0 17.934 2.852 34.352 16.2 47.7 9.746 9.746 19 18.95 19 18.95-2.5 3.067-5.2 6.067-8.1 9-.7.833-1.483 1.6-2.35 2.3-2.533 2.5-5.167 4.817-7.9 6.95l-17.55-17.55c-15.598-15.6-27.996-17.1-48.6-17.1-19.77 0-33.223 1.822-47.7 16.3-8.647 8.647-18.55 18.6-18.55 18.6-3.767-2.867-7.333-6.034-10.7-9.5-2.8-2.8-5.417-5.667-7.85-8.6 0 0 9.798-9.848 19.15-19.2 13.852-13.853 16.1-29.916 16.1-47.85 0-17.5-2.874-33.823-15.6-46.55-8.835-8.836-21.05-21-21.05-21 2.833-3.6 5.917-7.067 9.25-10.4 2.934-2.867 5.934-5.55 9-8.05L61.1 43.85C74.102 56.852 90.767 60.2 108.7 60.2c18.467 0 35.077-3.577 48.6-17.1 8.32-8.32 19.3-19.25 19.3-19.25 2.9 2.367 5.733 4.933 8.5 7.7 3.467 3.533 6.65 7.183 9.55 10.95z" fill="#3A3F51" fill-rule="evenodd"/><g clip-rule="evenodd"><path d="M78.7 114c-.2-1.167-.332-2.35-.4-3.55-.032-.667-.05-1.333-.05-2 0-.7.018-1.367.05-2 0-.067.018-.133.05-.2.435-7.367 3.334-13.733 8.7-19.1 5.9-5.833 12.984-8.75 21.25-8.75 8.3 0 15.384 2.917 21.25 8.75 5.834 5.934 8.75 13.033 8.75 21.3 0 8.267-2.916 15.35-8.75 21.25-.2.233-.416.45-.65.65-.966.933-1.982 1.783-3.05 2.55-5.065 3.733-10.916 5.6-17.55 5.6s-12.466-1.866-17.5-5.6c-1.332-.934-2.582-2-3.75-3.2-4.532-4.5-7.316-9.734-8.35-15.7z" fill="#0CF" fill-rule="evenodd"/><path d="M157.8 59.75l-15 14.65M30.785 32.526L71.65 73.25m84.6 84.25l27.808 28.78m1.855-153.894L157.8 59.75m-125.45 126l27.35-27.4" fill="none" stroke="#0CF" stroke-miterlimit="1" stroke-width="2"/><path d="M157.8 59.75l-16.95 17.2M58.97 60.604l17.2 17.15M59.623 158.43l16.75-17.4m61.928-1.396l18.028 17.945" fill="none" stroke="#0CF" stroke-miterlimit="1" stroke-width="7"/></g></svg>';
     const FILTERS = [
-        { id: 'all', label: 'All' },
-        { id: 'pending', label: 'Pending Approval' },
-        { id: 'processing', label: 'Processing' },
-        { id: 'comingsoon', label: 'Coming Soon' },
-        { id: 'available', label: 'Available' }
+        { id: 'all', get label() { return window.seerrFinI18n.t('requests.filterAll'); } },
+        { id: 'pending', get label() { return window.seerrFinI18n.t('requests.filterPendingApproval'); } },
+        { id: 'processing', get label() { return window.seerrFinI18n.t('requests.filterProcessing'); } },
+        { id: 'comingsoon', get label() { return window.seerrFinI18n.t('requests.filterComingSoon'); } },
+        { id: 'available', get label() { return window.seerrFinI18n.t('requests.filterAvailable'); } }
     ];
 
     const state = {
@@ -194,13 +194,13 @@ window.seerrFinLog = window.seerrFinLog || {
         const hours = Math.floor(diff / 3600000);
         const days = Math.floor(diff / 86400000);
 
-        if (minutes < 1) { return 'just now'; }
+        if (minutes < 1) { return window.seerrFinI18n.t('requests.timeJustNow'); }
 
-        if (minutes < 60) { return minutes + 'm ago'; }
+        if (minutes < 60) { return window.seerrFinI18n.t('requests.timeMinutesAgo', { minutes: minutes }); }
 
-        if (hours < 24) { return hours + 'h ago'; }
+        if (hours < 24) { return window.seerrFinI18n.t('requests.timeHoursAgo', { hours: hours }); }
 
-        if (days < 30) { return days + 'd ago'; }
+        if (days < 30) { return window.seerrFinI18n.t('requests.timeDaysAgo', { days: days }); }
 
         return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
     }
@@ -246,7 +246,7 @@ window.seerrFinLog = window.seerrFinLog || {
     function renderCardActions(item) {
         if (!item.tmdbId) { return; }
 
-        const safeTitle = escapeHtml(item.title || 'content');
+        const safeTitle = escapeHtml(item.title || window.seerrFinI18n.t('requests.content'));
         const mediaType = item.type === 'tv' ? 'tv' : 'movie';
         const safeTmdbId = escapeHtml(String(item.tmdbId));
         const safeMediaType = escapeHtml(mediaType);
@@ -254,7 +254,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const playBtn = isPlayableRequest(item) ? `
             <button type="button" class="seerrfin-request-action-btn seerrfin-request-play-btn"
                 data-jellyfin-item-id="${escapeHtml(String(item.jellyfinItemId))}"
-                aria-label="Open ${safeTitle} in Jellyfin" title="Open in Jellyfin">
+                aria-label="${window.seerrFinI18n.t('requests.openInJellyfin', { title: safeTitle })}" title="${window.seerrFinI18n.t('requests.openInJellyfinShort')}">
                 <span class="material-icons" aria-hidden="true">play_arrow</span>
             </button>
         ` : '';
@@ -268,7 +268,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 radarrBtn = `
                     <button type="button" class="seerrfin-request-action-btn seerrfin-request-radarr-btn"
                         data-open-url="${escapeHtml(radarrUrl)}"
-                        aria-label="Open ${safeTitle} in Radarr" title="Open in Radarr">
+                        aria-label="${window.seerrFinI18n.t('requests.openInRadarr', { title: safeTitle })}" title="${window.seerrFinI18n.t('requests.openInRadarrShort')}">
                         ${RADARR_LOGO}
                     </button>
                 `;
@@ -284,7 +284,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 sonarrBtn = `
                     <button type="button" class="seerrfin-request-action-btn seerrfin-request-sonarr-btn"
                         data-open-url="${escapeHtml(sonarrUrl)}"
-                        aria-label="Open ${safeTitle} in Sonarr" title="Open in Sonarr">
+                        aria-label="${window.seerrFinI18n.t('requests.openInSonarr', { title: safeTitle })}" title="${window.seerrFinI18n.t('requests.openInSonarrShort')}">
                         ${SONARR_LOGO}
                     </button>
                 `;
@@ -296,12 +296,12 @@ window.seerrFinLog = window.seerrFinLog || {
                 ${playBtn}
                 <button type="button" class="seerrfin-request-action-btn seerrfin-request-modal-btn"
                     data-tmdb-id="${safeTmdbId}" data-media-type="${safeMediaType}"
-                    aria-label="View request details for ${safeTitle}" title="Request details">
+                    aria-label="${window.seerrFinI18n.t('requests.viewDetailsFor', { title: safeTitle })}" title="${window.seerrFinI18n.t('requests.requestDetails')}">
                     <span class="material-icons" aria-hidden="true">download</span>
                 </button>
                 <button type="button" class="seerrfin-request-action-btn seerrfin-request-seerr-btn"
                     data-tmdb-id="${safeTmdbId}" data-media-type="${safeMediaType}"
-                    aria-label="Open ${safeTitle} in Seerr" title="Open in Seerr">
+                    aria-label="${window.seerrFinI18n.t('requests.openInSeerr', { title: safeTitle })}" title="${window.seerrFinI18n.t('requests.openInSeerrShort')}">
                     ${SEERR_LOGO}
                 </button>
                 ${radarrBtn}
@@ -366,7 +366,7 @@ window.seerrFinLog = window.seerrFinLog || {
     function formatBytes(bytes) {
         const value = Number(bytes);
 
-        if (!value || value <= 0) { return '0.0 GB'; }
+        if (!value || value <= 0) { return window.seerrFinI18n.t('requests.zeroGb'); }
 
         return (value / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
     }
@@ -378,7 +378,7 @@ window.seerrFinLog = window.seerrFinLog || {
 
         if (!raw || !statusKey) {
             return mediaFailed ?
-                { statusKey: 'failed', statusLabel: 'Failed to find content', percent: 100, isActive: false } :
+                { statusKey: 'failed', statusLabel: window.seerrFinI18n.t('requests.failedToFindContent'), percent: 100, isActive: false } :
                 null;
         }
 
@@ -404,9 +404,9 @@ window.seerrFinLog = window.seerrFinLog || {
             progress.statusKey === 'queued' || progress.statusKey.indexOf('downloaded-') === 0
         );
 
-        const percentText = isFailed ? 'Failed' : (isTransfer ? `${percent}%` : '0%');
+        const percentText = isFailed ? window.seerrFinI18n.t('requests.statusFailed') : (isTransfer ? `${percent}%` : '0%');
         const detailText = isFailed ?
-            'Failed to find content' :
+            window.seerrFinI18n.t('requests.failedToFindContent') :
             (isTransfer ?
                 `${formatBytes(progress.downloadedBytes)}/${formatBytes(progress.totalBytes)}` :
                 (progress.statusLabel || ''));
@@ -425,8 +425,8 @@ window.seerrFinLog = window.seerrFinLog || {
     }
 
     function renderContentBlock(item, isLandscape) {
-        const statusLabel = item.mediaStatusLabel || 'Unknown';
-        const safeTitle = escapeHtml(item.title || 'Unknown');
+        const statusLabel = item.mediaStatusLabel ? window.seerrFinI18n.tMediaStatusLabel(item.mediaStatusLabel) : window.seerrFinI18n.t('common.unknown');
+        const safeTitle = escapeHtml(item.title || window.seerrFinI18n.t('common.unknown'));
         const loadingTitle = item.metadataPending === true && !item._metadataError && (!item.title || item.title === 'Unknown');
         const timeAgo = item.createdAt ? escapeHtml(formatRelativeDate(item.createdAt)) : '';
         const avatarUrl = getAvatarUrl(item.requestedByAvatar);
@@ -439,18 +439,18 @@ window.seerrFinLog = window.seerrFinLog || {
         ];
 
         if (item.is4k) {
-            chips.push('<span class="seerrfin-request-chip seerrfin-request-chip--4k">4K</span>');
+            chips.push('<span class="seerrfin-request-chip seerrfin-request-chip--4k">' + escapeHtml(window.seerrFinI18n.t('requests.is4k')) + '</span>');
         }
 
         if (item.type) {
-            chips.push(`<span class="seerrfin-request-chip seerrfin-request-chip--type">${escapeHtml(item.type === 'tv' ? 'TV' : 'Movie')}</span>`);
+            chips.push(`<span class="seerrfin-request-chip seerrfin-request-chip--type">${escapeHtml(item.type === 'tv' ? window.seerrFinI18n.t('account.tvShowSingular') : window.seerrFinI18n.t('account.movieSingular'))}</span>`);
         }
 
         const yearHtml = item.year ? ` <span class="seerrfin-request-year">(${escapeHtml(String(item.year))})</span>` : '';
         const timeAgoHtml = timeAgo ? ` &bull; <span>${timeAgo}</span>` : '';
 
         const seasonNumbers = Array.isArray(item.seasonNumbers) ? item.seasonNumbers : [];
-        const seasonsHtml = item.type === 'tv' && seasonNumbers.length ? `<div class="seerrfin-request-meta">Requested seasons: <span class="seerrfin-request-meta-light">${escapeHtml(seasonNumbers.join(', '))}</span></div>` : '';
+        const seasonsHtml = item.type === 'tv' && seasonNumbers.length ? `<div class="seerrfin-request-meta">${window.seerrFinI18n.t('requests.requestedSeasons')}: <span class="seerrfin-request-meta-light">${escapeHtml(seasonNumbers.join(', '))}</span></div>` : '';
 
         const progress = getServarrProgress(item);
         const progressSpacerHtml = progress && !isLandscape ? '<div class="seerrfin-request-progress-spacer"></div>' : '';
@@ -459,15 +459,15 @@ window.seerrFinLog = window.seerrFinLog || {
         return `
             <div class="seerrfin-request-content">
                 <div class="seerrfin-request-title">
-                    <span title="${safeTitle}"${loadingTitle ? ' class="seerrfin-request-title-loading"' : ''}>${loadingTitle ? 'Loading details…' : safeTitle}</span>
+                    <span title="${safeTitle}"${loadingTitle ? ' class="seerrfin-request-title-loading"' : ''}>${loadingTitle ? window.seerrFinI18n.t('requests.loadingDetails') : safeTitle}</span>
                     ${yearHtml}
                 </div>
-                ${item._metadataError ? `<div class="seerrfin-request-metadata-error">Could not load details. <button type="button" class="seerrfin-request-metadata-retry" data-request-id="${escapeHtml(String(item.id))}">Retry</button></div>` : ''}
+                ${item._metadataError ? `<div class="seerrfin-request-metadata-error">${window.seerrFinI18n.t('requests.couldNotLoadDetails')} <button type="button" class="seerrfin-request-metadata-retry" data-request-id="${escapeHtml(String(item.id))}">${window.seerrFinI18n.t('common.retry')}</button></div>` : ''}
                 <div class="seerrfin-request-chips">${chips.join('')}</div>
                 <div class="seerrfin-request-meta">
-                    <span>Requested by</span>
+                    <span>${window.seerrFinI18n.t('requests.requestedByLabel')}</span>
                     ${avatarHtml}
-                    <span class="seerrfin-request-meta-light">${escapeHtml(item.requestedBy || 'Unknown')}</span>
+                    <span class="seerrfin-request-meta-light">${escapeHtml(item.requestedBy || window.seerrFinI18n.t('common.unknown'))}</span>
                     ${timeAgoHtml}
                 </div>
                 ${seasonsHtml}
@@ -527,9 +527,9 @@ window.seerrFinLog = window.seerrFinLog || {
 
     function renderPagination(page, totalPages) {
         return `
-            <button type="button" class="raised emby-button seerrfin-requests-prev" ${page <= 1 ? 'disabled' : ''}>Previous</button>
-            <span class="seerrfin-requests-page-info">Page ${page} of ${totalPages}</span>
-            <button type="button" class="raised emby-button seerrfin-requests-next" ${page >= totalPages ? 'disabled' : ''}>Next</button>
+            <button type="button" class="raised emby-button seerrfin-requests-prev" ${page <= 1 ? 'disabled' : ''}>${window.seerrFinI18n.t('common.previous')}</button>
+            <span class="seerrfin-requests-page-info">${window.seerrFinI18n.t('common.pageInfo', { page: page, totalPages: totalPages })}</span>
+            <button type="button" class="raised emby-button seerrfin-requests-next" ${page >= totalPages ? 'disabled' : ''}>${window.seerrFinI18n.t('common.next')}</button>
         `;
     }
 
@@ -740,7 +740,7 @@ window.seerrFinLog = window.seerrFinLog || {
         const body = container.querySelector('.seerrfin-requests-body');
         if (!body) return;
         if (!state.pageRequests.length) {
-            body.innerHTML = '<div class="seerrfin-empty-row padded-left">No requests found.</div>';
+            body.innerHTML = `<div class="seerrfin-empty-row padded-left">${window.seerrFinI18n.t('requests.empty')}</div>`;
             cancelMetadataLoads();
             updatePagination(container, state.totalPages);
             return;
@@ -850,7 +850,7 @@ window.seerrFinLog = window.seerrFinLog || {
 
         // Refresh keeps current cards on screen; only initial/filter/page loads show Loading...
         if (body && !keepVisible) {
-            body.innerHTML = `<div class="seerrfin-loading-row padded-left">Loading...</div>`;
+            body.innerHTML = `<div class="seerrfin-loading-row padded-left">${window.seerrFinI18n.t('common.loadingEllipsis')}</div>`;
         }
 
         log.info('loading requests tab (page ' + state.page + ', filter ' + state.filter + ')');
@@ -890,7 +890,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 updatePagination(container, 1);
 
                 if (body) {
-                    body.innerHTML = `<div class="seerrfin-empty-row padded-left">Could not load requests. Check Seerr settings.</div>`;
+                    body.innerHTML = `<div class="seerrfin-empty-row padded-left">${window.seerrFinI18n.t('requests.couldNotLoadRequests')}</div>`;
                 }
 
                 return false;
@@ -1054,8 +1054,8 @@ window.seerrFinLog = window.seerrFinLog || {
         return `
             <div class="verticalSection seerrfin-requests-panel">
                 <div class="sectionTitleContainer sectionTitleContainer-cards padded-left padded-right">
-                    <h2 class="sectionTitle sectionTitle-cards">Requests</h2>
-                    <button type="button" class="seerrfin-requests-reload" aria-label="Reload requests" title="Reload requests">
+                    <h2 class="sectionTitle sectionTitle-cards">${window.seerrFinI18n.t('tab.requests')}</h2>
+                    <button type="button" class="seerrfin-requests-reload" aria-label="${window.seerrFinI18n.t('requests.reload')}" title="${window.seerrFinI18n.t('requests.reload')}">
                         <span class="material-icons" aria-hidden="true">refresh</span>
                     </button>
                 </div>

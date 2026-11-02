@@ -27,11 +27,11 @@
 
         if (typeof error?.clone === 'function') {
             try {
-                return (await error.clone().json()).message || 'Unable to load discovery. Please try again.';
+                return (await error.clone().json()).message || window.seerrFinI18n.t('filters.loadError');
             } catch (_) {}
         }
 
-        return 'Unable to load discovery. Please try again.';
+        return window.seerrFinI18n.t('filters.loadError');
     }
 
     function optionsHtml(items) {
@@ -42,9 +42,9 @@
         return `
             <div class="seerrfin-filter-field" data-filter-pick="${name}">
                 <span class="seerrfin-filter-label">${label}</span>
-                <button type="button" class="seerrfin-filter-select" data-filter-pick-toggle aria-label="Select ${label.toLowerCase()}" aria-expanded="false"><span data-filter-pick-text>Any</span><span class="material-icons" aria-hidden="true">expand_more</span></button>
+                <button type="button" class="seerrfin-filter-select" data-filter-pick-toggle aria-label="${window.seerrFinI18n.t('filters.selectLabel', { label: label.toLowerCase() })}" aria-expanded="false"><span data-filter-pick-text>${window.seerrFinI18n.t('filters.any')}</span><span class="material-icons" aria-hidden="true">expand_more</span></button>
                 <div class="seerrfin-filter-pick-options" hidden>
-                    <input type="search" placeholder="Search…" aria-label="Search ${label.toLowerCase()}" autocomplete="off">
+                    <input type="search" placeholder="${window.seerrFinI18n.t('filters.searchEllipsis')}" aria-label="${window.seerrFinI18n.t('filters.searchLabel', { label: label.toLowerCase() })}" autocomplete="off">
                     <div data-filter-pick-items>${options}</div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
             <div class="seerrfin-filter-field" data-filter-search="${name}" data-kind="${kind}">
                 <label class="seerrfin-filter-label" for="${id}-${name}">${label}</label>
                 <div class="seerrfin-filter-search-control">
-                    <input id="${id}-${name}" type="search" role="combobox" aria-autocomplete="list" aria-controls="${id}-${name}-options" aria-expanded="false" maxlength="80" autocomplete="off" placeholder="Search ${label.toLowerCase()}…">
+                    <input id="${id}-${name}" type="search" role="combobox" aria-autocomplete="list" aria-controls="${id}-${name}-options" aria-expanded="false" maxlength="80" autocomplete="off" placeholder="${window.seerrFinI18n.t('filters.searchLabel', { label: label.toLowerCase() })}…">
                     <div id="${id}-${name}-options" class="seerrfin-filter-suggestions" role="listbox" aria-label="${label}" hidden></div>
                 </div>
                 <div class="seerrfin-filter-tags"></div>
@@ -96,15 +96,16 @@
         const date = movie ? 'primaryReleaseDate' : 'firstAirDate';
         const dateSort = movie ? 'release_date' : 'first_air_date';
         const titleSort = movie ? 'original_title' : 'original_name';
+        const t = window.seerrFinI18n.t;
         const sorts = [
-            ['popularity.desc', 'Popularity descending'],
-            ['popularity.asc', 'Popularity ascending'],
-            [dateSort + '.desc', 'Release date descending'],
-            [dateSort + '.asc', 'Release date ascending'],
-            ['vote_average.desc', 'TMDB rating descending'],
-            ['vote_average.asc', 'TMDB rating ascending'],
-            [titleSort + '.asc', 'Title (A–Z)'],
-            [titleSort + '.desc', 'Title (Z–A)']
+            ['popularity.desc', t('filters.sortPopularityDesc')],
+            ['popularity.asc', t('filters.sortPopularityAsc')],
+            [dateSort + '.desc', t('filters.sortReleaseDateDesc')],
+            [dateSort + '.asc', t('filters.sortReleaseDateAsc')],
+            ['vote_average.desc', t('filters.sortRatingDesc')],
+            ['vote_average.asc', t('filters.sortRatingAsc')],
+            [titleSort + '.asc', t('filters.sortTitleAsc')],
+            [titleSort + '.desc', t('filters.sortTitleDesc')]
         ];
         const certificates = movie
             ? ['NR', 'G', 'PG', 'PG-13', 'R', 'NC-17']
@@ -115,19 +116,19 @@
             <section class="seerrfin-filter-panel" role="dialog" aria-modal="true" aria-labelledby="${id}-title">
                 <header>
                     <div>
-                        <h2 id="${id}-title">Filters</h2>
-                        <span data-filter-modal-count>0 active filters</span>
+                        <h2 id="${id}-title">${t('filters.filtersTitle')}</h2>
+                        <span data-filter-modal-count>${t('filters.activeFilters', { count: 0 })}</span>
                     </div>
-                    <button type="button" class="paper-icon-button-light" data-filter-close aria-label="Close filters"><span class="material-icons" aria-hidden="true">close</span></button>
+                    <button type="button" class="paper-icon-button-light" data-filter-close aria-label="${t('filters.closeFilters')}"><span class="material-icons" aria-hidden="true">close</span></button>
                 </header>
                 <form>
                     <div class="seerrfin-filter-fields">
                         <label class="seerrfin-filter-field seerrfin-filter-wide">
-                            <span class="seerrfin-filter-label">Sort by</span>
+                            <span class="seerrfin-filter-label">${t('filters.sortBy')}</span>
                             <select name="sortBy">${sorts.map(([value, name]) => `<option value="${value}">${name}</option>`).join('')}</select>
                         </label>
                         <fieldset class="seerrfin-filter-dates seerrfin-filter-wide">
-                            <legend>${movie ? 'Release date' : 'First air date'}</legend>
+                            <legend>${movie ? t('filters.releaseDate') : t('filters.firstAirDate')}</legend>
                             <div>
                                 <label>From<input name="${date}Gte" type="date">
                                 </label>
@@ -135,25 +136,25 @@
                                 </label>
                             </div>
                         </fieldset>
-                        ${movie ? searchField(id, 'studio', 'Studio', 'company') : picker('status', 'Status', checkboxes([
-                            'Returning series',
-                            'Planned',
-                            'In production',
-                            'Ended',
-                            'Cancelled',
-                            'Pilot'
+                        ${movie ? searchField(id, 'studio', t('filters.studio'), 'company') : picker('status', t('filters.status'), checkboxes([
+                            t('filters.statusReturningSeries'),
+                            t('filters.statusPlanned'),
+                            t('filters.statusInProduction'),
+                            t('filters.statusEnded'),
+                            t('filters.statusCancelled'),
+                            t('filters.statusPilot')
                         ].map((name, id) => ({ id, name })), 'status'))}
-                        ${picker('genre', 'Genres')}
-                        ${searchField(id, 'keywords', 'Keywords', 'keyword')}
-                        ${searchField(id, 'excludeKeywords', 'Exclude keywords', 'keyword')}
+                        ${picker('genre', t('filters.genre'))}
+                        ${searchField(id, 'keywords', t('filters.keywords'), 'keyword')}
+                        ${searchField(id, 'excludeKeywords', t('filters.excludeKeywords'), 'keyword')}
                         <div class="seerrfin-filter-field seerrfin-filter-wide">
-                            <label class="seerrfin-filter-label" for="${id}-language-mode">Original language</label>
-                            <select id="${id}-language-mode" data-filter-language-mode><option value="server">Default</option><option value="all">All languages</option><option value="custom">Select languages</option></select>
-                            <div data-filter-languages hidden>${picker('languageChoices', 'Languages')}</div>
+                            <label class="seerrfin-filter-label" for="${id}-language-mode">${t('filters.originalLanguage')}</label>
+                            <select id="${id}-language-mode" data-filter-language-mode><option value="server">${t('filters.default')}</option><option value="all">${t('filters.allLanguages')}</option><option value="custom">${t('filters.selectLanguages')}</option></select>
+                            <div data-filter-languages hidden>${picker('languageChoices', t('filters.languages'))}</div>
                             <input type="hidden" name="language">
                         </div>
                         <fieldset class="seerrfin-filter-certifications seerrfin-filter-wide">
-                            <legend>Content rating <span>(US)</span></legend>
+                            <legend>${t('filters.contentRating')} <span>(US)</span></legend>
                             <div>${certificates.map(value => `
                                 <label>
                                     <input type="checkbox" name="certification" value="${value}">
@@ -161,22 +162,22 @@
                                 </label>
                             `).join('')}</div>
                         </fieldset>
-                        ${range('withRuntime', 'Runtime', 0, 400, 1, ' min')}
-                        ${range('voteAverage', 'TMDB user score', 1, 10, .1, '')}
-                        ${range('voteCount', 'TMDB user vote count', 0, 1000, 1, '')}
+                        ${range('withRuntime', t('filters.runtime'), 0, 400, 1, ' min')}
+                        ${range('voteAverage', t('filters.tmdbUserScore'), 1, 10, .1, '')}
+                        ${range('voteCount', t('filters.tmdbUserVoteCount'), 0, 1000, 1, '')}
                         <div class="seerrfin-filter-field seerrfin-filter-wide">
-                            <label class="seerrfin-filter-label" for="${id}-region">Streaming services</label>
-                            <select id="${id}-region" name="watchRegion" aria-label="Streaming region"></select>
+                            <label class="seerrfin-filter-label" for="${id}-region">${t('filters.streamingService')}</label>
+                            <select id="${id}-region" name="watchRegion" aria-label="${t('filters.streamingRegion')}"></select>
                             <div class="seerrfin-filter-providers" data-filter-providers></div>
-                            <button type="button" class="seerrfin-filter-more" data-filter-providers-more hidden>Show more</button>
+                            <button type="button" class="seerrfin-filter-more" data-filter-providers-more hidden>${t('filters.showMore')}</button>
                             <p data-filter-providers-status role="status"></p>
                         </div>
                     </div>
                     <p class="seerrfin-filter-status" data-filter-choices-status role="status"></p>
                     <p class="seerrfin-filter-status" data-filter-form-status role="alert"></p>
                     <footer>
-                        <button type="button" class="emby-button raised" data-filter-clear disabled>Clear filters</button>
-                        <button type="submit" class="emby-button raised" data-filter-apply disabled>Apply filters</button>
+                        <button type="button" class="emby-button raised" data-filter-clear disabled>${t('filters.reset')}</button>
+                        <button type="submit" class="emby-button raised" data-filter-apply disabled>${t('filters.apply')}</button>
                     </footer>
                 </form>
             </section>
@@ -216,12 +217,12 @@
         host.className = 'seerrfin-filter-host padded-left padded-right';
         host.innerHTML = `
             <div class="seerrfin-filter-heading sectionTitleContainer-cards">
-                <h2 class="sectionTitle">${escapeHtml(title || (type === 'movie' ? 'Movies' : 'TV Shows'))}</h2>
+                <h2 class="sectionTitle">${escapeHtml(title || (type === 'movie' ? window.seerrFinI18n.t('tab.movies') : window.seerrFinI18n.t('tab.tv')))}</h2>
                 <div class="seerrfin-filter-actions">
                 ${window.seerrFinPlugin?._displaySettings?.ShowDownloadDetailsInDiscoveryPages === true ? `
-                    <button type="button" class="seerrfin-requests-reload seerrfin-discovery-reload" aria-label="Reload download details" title="Reload download details"><span class="material-icons" aria-hidden="true">refresh</span></button>
+                    <button type="button" class="seerrfin-requests-reload seerrfin-discovery-reload" aria-label="${window.seerrFinI18n.t('filters.reloadDownloadDetails')}" title="${window.seerrFinI18n.t('filters.reloadDownloadDetails')}"><span class="material-icons" aria-hidden="true">refresh</span></button>
                 ` : ''}
-                <button type="button" class="seerrfin-filter-icon" data-filter-open aria-label="${type === 'movie' ? 'Movie' : 'TV'} filters" title="Filters"><span class="material-icons" aria-hidden="true">settings</span><span data-filter-count hidden></span></button>
+                <button type="button" class="seerrfin-filter-icon" data-filter-open aria-label="${type === 'movie' ? window.seerrFinI18n.t('tab.movies') : window.seerrFinI18n.t('tab.tv')} ${window.seerrFinI18n.t('filters.filtersTitle').toLowerCase()}" title="${window.seerrFinI18n.t('filters.filtersTitle')}"><span class="material-icons" aria-hidden="true">settings</span><span data-filter-count hidden></span></button>
                 </div>
             </div>
             <div class="seerrfin-filter-results" aria-live="polite"></div>
@@ -277,7 +278,7 @@
         function updateCount() {
             const count = countFilters(queryValues());
 
-            modal.querySelector('[data-filter-modal-count]').textContent = count + ' active filter' + (count === 1 ? '' : 's');
+            modal.querySelector('[data-filter-modal-count]').textContent = window.seerrFinI18n.t('filters.activeFilters', { count: count });
             form.querySelector('[data-filter-clear]').disabled = count === 0 && !state.applied;
         }
 
@@ -352,7 +353,7 @@
 
         function refreshPicker(field) {
             const selected = Array.from(field.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.nextElementSibling.textContent);
-            const text = selected.length ? selected.join(', ') : 'Any';
+            const text = selected.length ? selected.join(', ') : window.seerrFinI18n.t('filters.any');
 
             field.querySelector('[data-filter-pick-text]').textContent = text;
             field.querySelector('[data-filter-pick-toggle]').setAttribute('aria-label', field.querySelector('.seerrfin-filter-label').textContent + ': ' + text);
@@ -375,13 +376,13 @@
 
             const more = form.querySelector('[data-filter-providers-more]');
             more.hidden = true;
-            more.textContent = 'Show more';
+            more.textContent = window.seerrFinI18n.t('filters.showMore');
 
             const providerStatus = form.querySelector('[data-filter-providers-status]');
 
             if (!region) return;
 
-            providerStatus.textContent = 'Loading streaming services…';
+            providerStatus.textContent = window.seerrFinI18n.t('filters.loadingStreamingServices');
             api(type, true, new URLSearchParams({ kind: 'providers', region })).then(function (items) {
                 if (!current() || requestId !== state.providerId) return;
 
@@ -396,21 +397,21 @@
                     `;
                 }).join('');
                 more.hidden = items.length <= 24;
-                providerStatus.textContent = items.length ? '' : 'No streaming services in this region.';
+                providerStatus.textContent = items.length ? '' : window.seerrFinI18n.t('filters.noStreamingServicesInRegion');
                 updateCount();
             }).catch(async function (error) {
                 const message = await errorMessage(error);
 
                 if (!current() || requestId !== state.providerId) return;
 
-                providerStatus.innerHTML = `${escapeHtml(message)} <button type="button" class="emby-button" data-filter-providers-retry>Retry</button>`;
+                providerStatus.innerHTML = `${escapeHtml(message)} <button type="button" class="emby-button" data-filter-providers-retry>${window.seerrFinI18n.t('common.retry')}</button>`;
             });
         }
 
         function choices() {
             const requestId = ++state.choicesId;
             const choicesStatus = form.querySelector('[data-filter-choices-status]');
-            choicesStatus.textContent = 'Loading filters…';
+            choicesStatus.textContent = window.seerrFinI18n.t('filters.loadingFilters');
             api(type, true, '').then(function (data) {
                 if (!current() || requestId !== state.choicesId) return;
 
@@ -427,7 +428,7 @@
                     const names = data.originalLanguage.split('|').map(code => data.languages.find(x => x.id === code)?.name || code).join(', ');
 
                     form.querySelector('[data-filter-language-mode] option[value="server"]').textContent =
-                        'Default (' + (data.originalLanguage === 'all' ? 'All languages' : names) + ')';
+                        window.seerrFinI18n.t('filters.default') + ' (' + (data.originalLanguage === 'all' ? window.seerrFinI18n.t('filters.allLanguages') : names) + ')';
                 }
 
                 state.choicesReady = true;
@@ -439,7 +440,7 @@
 
                 if (!current() || requestId !== state.choicesId) return;
 
-                choicesStatus.innerHTML = `${escapeHtml(message)} <button type="button" class="emby-button" data-filter-choices-retry>Retry</button>`;
+                choicesStatus.innerHTML = `${escapeHtml(message)} <button type="button" class="emby-button" data-filter-choices-retry>${window.seerrFinI18n.t('common.retry')}</button>`;
             });
         }
 
@@ -451,7 +452,7 @@
             const query = new URLSearchParams(state.applied);
             query.set('page', page);
             parent.dataset.seerrfinFilterActive = 'true';
-            results.innerHTML = '<p role="status">Loading titles…</p>';
+            results.innerHTML = `<p role="status">${window.seerrFinI18n.t('filters.loadingTitles')}</p>`;
             api(type, false, query).then(function (data) {
                 if (!current() || requestId !== state.requestId) return;
 
@@ -462,11 +463,11 @@
 
                 results.classList.toggle('uses-backdrops', plugin.shouldUseBackdropThumbnails());
                 results.innerHTML = `
-${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'}<div class="seerrfin-filter-grid itemsContainer">${plugin.createDiscoverCards(data.items, true, { nativeCards, discoveryPage: true })}</div>
+${data.items.length ? '' : `<p role="status">${window.seerrFinI18n.t('filters.noTitlesMatch')}</p>`}<div class="seerrfin-filter-grid itemsContainer">${plugin.createDiscoverCards(data.items, true, { nativeCards, discoveryPage: true })}</div>
                     <div class="seerrfin-filter-pagination">
-                        <button type="button" class="emby-button raised" data-filter-page="${data.page - 1}"${data.page <= 1 ? ' disabled' : ''}>Previous</button>
-                        <span>Page ${data.page} of ${data.totalPages}</span>
-                        <button type="button" class="emby-button raised" data-filter-page="${data.page + 1}"${data.page >= data.totalPages ? ' disabled' : ''}>Next</button>
+                        <button type="button" class="emby-button raised" data-filter-page="${data.page - 1}"${data.page <= 1 ? ' disabled' : ''}>${window.seerrFinI18n.t('common.previous')}</button>
+                        <span>${window.seerrFinI18n.t('common.pageInfo', { page: data.page, totalPages: data.totalPages })}</span>
+                        <button type="button" class="emby-button raised" data-filter-page="${data.page + 1}"${data.page >= data.totalPages ? ' disabled' : ''}>${window.seerrFinI18n.t('common.next')}</button>
                     </div>
                 `;
                 plugin.initNativeOrCustomCards(results.querySelector('.itemsContainer'), nativeCards);
@@ -475,7 +476,7 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
 
                 if (!current() || requestId !== state.requestId) return;
 
-                results.innerHTML = `<p role="alert">${escapeHtml(message)}</p><button type="button" class="emby-button raised" data-filter-results-retry>Retry</button>`;
+                results.innerHTML = `<p role="alert">${escapeHtml(message)}</p><button type="button" class="emby-button raised" data-filter-results-retry>${window.seerrFinI18n.t('common.retry')}</button>`;
             });
         }
 
@@ -543,7 +544,7 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
             const selected = field._selected || [];
 
             field.querySelector('input[type="hidden"]').value = selected.map(x => x.id).join(',');
-            field.querySelector('.seerrfin-filter-tags').innerHTML = selected.map(item => `<button type="button" data-filter-remove="${item.id}" aria-label="Remove ${escapeHtml(item.name)}">${escapeHtml(item.name)}<span class="material-icons" aria-hidden="true">close</span></button>`).join('');
+            field.querySelector('.seerrfin-filter-tags').innerHTML = selected.map(item => `<button type="button" data-filter-remove="${item.id}" aria-label="${escapeHtml(window.seerrFinI18n.t('filters.removeItem', { name: item.name }))}">${escapeHtml(item.name)}<span class="material-icons" aria-hidden="true">close</span></button>`).join('');
             updateCount();
         }
 
@@ -557,7 +558,7 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
             const mode = form.querySelector('[data-filter-language-mode]');
 
             if (mode.value === 'custom' && checked('languageChoices').length === 0) {
-                status.textContent = 'Select at least one language.';
+                status.textContent = window.seerrFinI18n.t('filters.selectAtLeastOneLanguage');
                 mode.focus();
 
                 return;
@@ -593,7 +594,7 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
 
             if (input.type === 'checkbox' && ['genre', 'languageChoices', 'watchProviders'].includes(input.name) && checked(input.name).length > 20) {
                 input.checked = false;
-                status.textContent = 'Select up to 20 options.';
+                status.textContent = window.seerrFinI18n.t('filters.selectUpTo20Options');
             } else status.textContent = '';
 
             const picker = input.closest('[data-filter-pick]');
@@ -645,10 +646,10 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
             if (button.hasAttribute('data-filter-providers-retry')) providers();
 
             if (button.hasAttribute('data-filter-providers-more')) {
-                const showing = button.textContent === 'Show more';
+                const showing = button.textContent === window.seerrFinI18n.t('filters.showMore');
 
                 form.querySelectorAll('[data-filter-extra-provider]').forEach(item => { item.hidden = !showing; });
-                button.textContent = showing ? 'Show less' : 'Show more';
+                button.textContent = showing ? window.seerrFinI18n.t('filters.showLess') : window.seerrFinI18n.t('filters.showMore');
             }
 
             const picker = button.closest('[data-filter-pick]');
@@ -679,7 +680,7 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
                 const searchStatus = field.querySelector('[data-search-status]');
 
                 if (selected.length >= 20 && field.dataset.filterSearch !== 'studio') {
-                    searchStatus.textContent = 'Select up to 20 keywords.';
+                    searchStatus.textContent = window.seerrFinI18n.t('filters.selectUpTo20Keywords');
 
                     return;
                 }
@@ -720,7 +721,7 @@ ${data.items.length ? '' : '<p role="status">No titles match these filters.</p>'
                         suggestions.innerHTML = items.map(x => `<button type="button" role="option" aria-selected="false" data-filter-choose="${x.id}">${escapeHtml(x.name)}</button>`).join('');
                         suggestions.hidden = items.length === 0;
                         input.setAttribute('aria-expanded', String(items.length > 0));
-                        searchStatus.textContent = items.length ? '' : 'No matches.';
+                        searchStatus.textContent = items.length ? '' : window.seerrFinI18n.t('filters.noMatches');
                     }).catch(async function (error) {
                         const message = await errorMessage(error);
 

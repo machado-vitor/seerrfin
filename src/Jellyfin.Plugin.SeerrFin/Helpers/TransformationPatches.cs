@@ -97,7 +97,9 @@ public static class TransformationPatches
             + $"<link rel=\"stylesheet\" href=\"../SeerrFin/seerrfin-account.css{cacheParam}\" />"
             + $"<link rel=\"stylesheet\" href=\"../SeerrFin/seerrfin-filters.css{cacheParam}\" />";
         string scripts =
-            $"<script defer src=\"../SeerrFin/seerrfin-modal.js{cacheParam}\"></script>"
+            // i18n must load first so every other injected script can call window.seerrFinI18n.t(...)
+            $"<script src=\"../SeerrFin/seerrfin-i18n.js{cacheParam}\"></script>"
+            + $"<script defer src=\"../SeerrFin/seerrfin-modal.js{cacheParam}\"></script>"
             + $"<script defer src=\"../SeerrFin/seerrfin-nativeui.js{cacheParam}\"></script>"
             + $"<script defer src=\"../SeerrFin/seerrfin-tabs.js{cacheParam}\"></script>"
             + $"<script defer src=\"../SeerrFin/seerrfin-filters.js{cacheParam}\"></script>"

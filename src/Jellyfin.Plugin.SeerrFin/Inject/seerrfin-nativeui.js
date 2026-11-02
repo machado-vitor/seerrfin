@@ -56,7 +56,7 @@ window.seerrFinLog = window.seerrFinLog || {
             return (items || []).map(function (item) {
                 const mediaId = plugin.getProviderId(item, 'Tmdb') || plugin.getProviderId(item, 'Jellyseerr') || plugin.getField(item, 'id', 'Id');
                 const mediaType = plugin.normalizeDiscoverMediaType(plugin.getField(item, 'SourceType', 'sourceType', 'mediaType', 'MediaType'));
-                const safeName = plugin.escapeHtml(plugin.getField(item, 'Name', 'name', 'OriginalTitle', 'originalTitle') || 'Unknown');
+                const safeName = plugin.escapeHtml(plugin.getField(item, 'Name', 'name', 'OriginalTitle', 'originalTitle') || window.seerrFinI18n.t('common.unknown'));
 
                 if (!mediaId || !mediaType) { return ''; }
 
@@ -129,7 +129,7 @@ window.seerrFinLog = window.seerrFinLog || {
             const centerFocusAttr = plugin.getAdvancedCarouselSetting('enableCenterFocus', true) ?
                 ' data-centerfocus="true"' :
                 '';
-            const safeTitle = plugin.escapeHtml(title || 'Loading');
+            const safeTitle = plugin.escapeHtml(title || window.seerrFinI18n.t('common.loading'));
             const cardType = usePoster ? 'overflowPortraitCard' : 'overflowBackdropCard';
             const padderType = usePoster ? 'cardPadder-overflowPortrait' : 'cardPadder-overflowBackdrop';
 
@@ -176,7 +176,7 @@ window.seerrFinLog = window.seerrFinLog || {
         // Builds carousel cards for genres providers studios and networks
         createBoxCard: function (plugin, item, mediaType, kind) {
             const id = item.id;
-            const name = item.name || 'Unknown';
+            const name = item.name || window.seerrFinI18n.t('common.unknown');
             const safeName = plugin.escapeHtml(name);
             const showLogo = plugin.shouldShowLogo(kind);
             const logoStyleKey = kind === 'provider' ?
@@ -236,7 +236,7 @@ window.seerrFinLog = window.seerrFinLog || {
                 <div data-seerrfin-grid-view="true" data-grid-shell="native">
                     <div class="verticalSection">
                         <div class="sectionTitleContainer sectionTitleContainer-cards padded-left padded-right">
-                            <button type="button" is="paper-icon-button-light" class="paper-icon-button-light" title="Back" aria-label="Back" data-grid-nav="back">
+                            <button type="button" is="paper-icon-button-light" class="paper-icon-button-light" title="${window.seerrFinI18n.t('nativeui.back')}" aria-label="${window.seerrFinI18n.t('nativeui.back')}" data-grid-nav="back">
                                 <span class="material-icons arrow_back" aria-hidden="true"></span>
                             </button>
                             <h2 class="sectionTitle sectionTitle-cards"></h2>
@@ -245,16 +245,16 @@ window.seerrFinLog = window.seerrFinLog || {
                             <div class="paging">
                                 <div class="listPaging"><span data-seerrfin-paging-text style="vertical-align:middle;"></span></div>
                             </div>
-                            <button type="button" is="paper-icon-button-light" class="btnSelectView autoSize paper-icon-button-light" title="Select view" disabled data-grid-menu="view">
+                            <button type="button" is="paper-icon-button-light" class="btnSelectView autoSize paper-icon-button-light" title="${window.seerrFinI18n.t('nativeui.selectView')}" disabled data-grid-menu="view">
                                 <span class="material-icons view_comfy" aria-hidden="true"></span>
                             </button>
-                            <button type="button" is="paper-icon-button-light" class="btnSort autoSize paper-icon-button-light" title="Sort" disabled data-grid-menu="sort">
+                            <button type="button" is="paper-icon-button-light" class="btnSort autoSize paper-icon-button-light" title="${window.seerrFinI18n.t('nativeui.sort')}" disabled data-grid-menu="sort">
                                 <span class="material-icons sort_by_alpha" aria-hidden="true"></span>
                             </button>
                         </div>
                         <div is="emby-itemscontainer" class="itemsContainer padded-left padded-right vertical-wrap focuscontainer-x" data-monitor="videoplayback,markplayed"></div>
                         <div data-seerrfin-loadmore style="display:none" class="paging padded-left padded-right">
-                            <button type="button" class="raised emby-button">Load more</button>
+                            <button type="button" class="raised emby-button">${window.seerrFinI18n.t('common.loadMore')}</button>
                         </div>
                         <div data-seerrfin-status style="display:none" class="listItemBodyText secondary padded-left padded-right"></div>
                     </div>
@@ -349,18 +349,18 @@ window.seerrFinLog = window.seerrFinLog || {
         getGridMenuOptions: function (type) {
             if (type === 'view') {
                 return [
-                    { value: 'Poster', label: 'Poster' },
-                    { value: 'PosterCard', label: 'Poster Card' },
-                    { value: 'Thumb', label: 'Thumb' },
-                    { value: 'ThumbCard', label: 'Thumb Card' }
+                    { value: 'Poster', label: window.seerrFinI18n.t('nativeui.viewPoster') },
+                    { value: 'PosterCard', label: window.seerrFinI18n.t('nativeui.viewPosterCard') },
+                    { value: 'Thumb', label: window.seerrFinI18n.t('nativeui.viewThumb') },
+                    { value: 'ThumbCard', label: window.seerrFinI18n.t('nativeui.viewThumbCard') }
                 ];
             }
 
             if (type === 'sort') {
                 return [
-                    { value: 'title', label: 'Title' },
-                    { value: 'year', label: 'Release date' },
-                    { value: 'rating', label: 'Community rating' }
+                    { value: 'title', label: window.seerrFinI18n.t('nativeui.sortTitle') },
+                    { value: 'year', label: window.seerrFinI18n.t('nativeui.sortReleaseDate') },
+                    { value: 'rating', label: window.seerrFinI18n.t('nativeui.sortCommunityRating') }
                 ];
             }
 
@@ -412,9 +412,9 @@ window.seerrFinLog = window.seerrFinLog || {
                             button: button,
                             query: query,
                             items: [
-                                { name: 'Name', id: 'SortName' },
-                                { name: 'Community rating', id: 'CommunityRating,SortName' },
-                                { name: 'Release date', id: 'PremiereDate,SortName' }
+                                { name: window.seerrFinI18n.t('nativeui.sortName'), id: 'SortName' },
+                                { name: window.seerrFinI18n.t('nativeui.sortCommunityRating'), id: 'CommunityRating,SortName' },
+                                { name: window.seerrFinI18n.t('nativeui.sortReleaseDate'), id: 'PremiereDate,SortName' }
                             ],
                             callback: function () {
                                 gridView.dataset.gridSortBy = query.SortBy;

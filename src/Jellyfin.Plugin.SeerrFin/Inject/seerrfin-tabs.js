@@ -24,20 +24,24 @@ if (typeof window.seerrFinPlugin === 'undefined') {
     const log = window.seerrFinLog;
 
     window.seerrFinPlugin = {
-        movieRows: [
-            { title: 'Trending movies this week', path: 'discover/movies/trending' },
-            { title: 'Popular movies', path: 'discover/movies/popular' },
-            { title: 'Top rated movies', path: 'discover/movies/top-rated' },
-            { title: 'Upcoming movies', path: 'discover/movies/upcoming' }
-        ],
+        get movieRows() {
+            return [
+                { title: window.seerrFinI18n.t('section.trendingMoviesWeek'), path: 'discover/movies/trending' },
+                { title: window.seerrFinI18n.t('section.popularMovies'), path: 'discover/movies/popular' },
+                { title: window.seerrFinI18n.t('section.topRatedMovies'), path: 'discover/movies/top-rated' },
+                { title: window.seerrFinI18n.t('section.upcomingMovies'), path: 'discover/movies/upcoming' }
+            ];
+        },
 
-        tvRows: [
-            { title: 'Trending shows this week', path: 'discover/tv/trending' },
-            { title: 'Popular shows', path: 'discover/tv/popular' },
-            { title: 'Top rated series', path: 'discover/tv/top-rated' },
-            { title: 'Upcoming series', path: 'discover/tv/upcoming' },
-            { title: 'Anime series', path: 'discover/tv/anime' }
-        ],
+        get tvRows() {
+            return [
+                { title: window.seerrFinI18n.t('section.trendingTvWeek'), path: 'discover/tv/trending' },
+                { title: window.seerrFinI18n.t('section.popularTv'), path: 'discover/tv/popular' },
+                { title: window.seerrFinI18n.t('section.topRatedTv'), path: 'discover/tv/top-rated' },
+                { title: window.seerrFinI18n.t('section.upcomingTv'), path: 'discover/tv/upcoming' },
+                { title: window.seerrFinI18n.t('section.animeTv'), path: 'discover/tv/anime' }
+            ];
+        },
 
         _watchersReady: false,
         _handlersBound: false,
@@ -53,13 +57,15 @@ if (typeof window.seerrFinPlugin === 'undefined') {
         _lastSearchItems: null,
         _activeSearchToken: null,
 
-        TAB_DEFS: {
-            movies: { sectionClass: 'seerrfin-movies-sections', defaultTitle: 'Movies' },
-            tv: { sectionClass: 'seerrfin-tv-sections', defaultTitle: 'TV Shows' },
-            discover: { sectionClass: 'seerrfin-discover-sections', defaultTitle: 'Discover' },
-            requests: { sectionClass: 'seerrfin-requests-sections', defaultTitle: 'Requests' },
-            watchlist: { sectionClass: 'seerrfin-watchlist-sections', defaultTitle: 'Watchlist' },
-            letterboxd: { sectionClass: 'seerrfin-letterboxd-sections', defaultTitle: 'Letterboxd' }
+        get TAB_DEFS() {
+            return {
+                movies: { sectionClass: 'seerrfin-movies-sections', defaultTitle: window.seerrFinI18n.t('tab.movies') },
+                tv: { sectionClass: 'seerrfin-tv-sections', defaultTitle: window.seerrFinI18n.t('tab.tv') },
+                discover: { sectionClass: 'seerrfin-discover-sections', defaultTitle: window.seerrFinI18n.t('tab.discover') },
+                requests: { sectionClass: 'seerrfin-requests-sections', defaultTitle: window.seerrFinI18n.t('tab.requests') },
+                watchlist: { sectionClass: 'seerrfin-watchlist-sections', defaultTitle: window.seerrFinI18n.t('tab.watchlist') },
+                letterboxd: { sectionClass: 'seerrfin-letterboxd-sections', defaultTitle: window.seerrFinI18n.t('letterboxd.title') }
+            };
         },
 
         CUSTOM_TABS_PLUGIN_ID: 'fbacd0b6-fd46-4a05-b0a4-2045d6a135b0',
@@ -1344,15 +1350,15 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                 Array.from(container.children).forEach(function (child) {
                     if (!child.classList.contains('seerrfin-filter-host')) child.remove();
                 });
-                container.insertAdjacentHTML('beforeend', '<div class="seerrfin-empty-row">Failed to load discovery rows. Check Seerr settings and that your Jellyfin user is linked in Seerr.</div>');
+                container.insertAdjacentHTML('beforeend', '<div class="seerrfin-empty-row">' + window.seerrFinI18n.t('tabs.failedToLoadDiscoveryRows') + '</div>');
                 window.seerrFinFilters?.mount(container, mediaType, self.resolveTabTitle(type, self._tabConfig?.tabs?.find(tab => tab.id === type)?.title));
             };
 
-            const browseTitle = mediaType === 'movie' ? 'Browse by studio' : 'Browse by network';
+            const browseTitle = mediaType === 'movie' ? window.seerrFinI18n.t('section.browseByStudio') : window.seerrFinI18n.t('section.browseByNetwork');
             const browseKind = mediaType === 'movie' ? 'studio' : 'network';
             const carouselDefs = [
-                { title: 'Browse by genre', path: 'genres/' + mediaType, kind: 'genre' },
-                { title: 'Browse by streaming service', path: 'providers/' + mediaType, kind: 'provider' },
+                { title: window.seerrFinI18n.t('section.browseByGenre'), path: 'genres/' + mediaType, kind: 'genre' },
+                { title: window.seerrFinI18n.t('section.browseByStreamingService'), path: 'providers/' + mediaType, kind: 'provider' },
                 { title: browseTitle, path: mediaType === 'movie' ? 'studios/movie' : 'networks/tv', kind: browseKind }
             ];
 
@@ -1481,15 +1487,15 @@ if (typeof window.seerrFinPlugin === 'undefined') {
             container.innerHTML = `
                 <div class="verticalSection seerrfin-discover-panel">
                     <div class="sectionTitleContainer sectionTitleContainer-cards padded-left padded-right">
-                        <h2 class="sectionTitle sectionTitle-cards">Discover</h2>
-                        <button type="button" class="seerrfin-discover-requests emby-tab-button emby-button" aria-label="View requests">
+                        <h2 class="sectionTitle sectionTitle-cards">${this.escapeHtml(window.seerrFinI18n.t('tab.discover'))}</h2>
+                        <button type="button" class="seerrfin-discover-requests emby-tab-button emby-button" aria-label="${this.escapeHtml(window.seerrFinI18n.t('tabs.viewRequests'))}">
                             <span class="material-icons" aria-hidden="true">download</span>
-                            <span class="emby-button-foreground">Requests</span>
+                            <span class="emby-button-foreground">${this.escapeHtml(window.seerrFinI18n.t('tab.requests'))}</span>
                         </button>
                     </div>
-                    <div class="seerrfin-discover-filters padded-left padded-right" role="tablist" aria-label="Discover media type">
-                        <button type="button" id="${panelId}-movies-tab" class="seerrfin-discover-filter is-active" data-discover-type="movies" role="tab" aria-controls="${panelId}-movies" aria-selected="true" tabindex="0">Movies</button>
-                        <button type="button" id="${panelId}-tv-tab" class="seerrfin-discover-filter" data-discover-type="tv" role="tab" aria-controls="${panelId}-tv" aria-selected="false" tabindex="-1">Shows</button>
+                    <div class="seerrfin-discover-filters padded-left padded-right" role="tablist" aria-label="${this.escapeHtml(window.seerrFinI18n.t('tabs.discoverMediaType'))}">
+                        <button type="button" id="${panelId}-movies-tab" class="seerrfin-discover-filter is-active" data-discover-type="movies" role="tab" aria-controls="${panelId}-movies" aria-selected="true" tabindex="0">${this.escapeHtml(window.seerrFinI18n.t('tab.movies'))}</button>
+                        <button type="button" id="${panelId}-tv-tab" class="seerrfin-discover-filter" data-discover-type="tv" role="tab" aria-controls="${panelId}-tv" aria-selected="false" tabindex="-1">${this.escapeHtml(window.seerrFinI18n.t('tab.tv'))}</button>
                     </div>
                 </div>
                 <div id="${panelId}-movies" class="seerrfin-discover-body" data-discover-panel="movies" role="tabpanel" aria-labelledby="${panelId}-movies-tab" tabindex="0"></div>
@@ -1950,7 +1956,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                 </span>
                 <div class="seerrfin-request-card-actions">
                     <button type="button" class="seerrfin-request-action-btn seerrfin-request-modal-btn"
-                        aria-label="Open request modal" title="Open request modal">
+                        aria-label="${this.escapeHtml(window.seerrFinI18n.t('tabs.openRequestModal'))}" title="${this.escapeHtml(window.seerrFinI18n.t('tabs.openRequestModal'))}">
                         <span class="material-icons" aria-hidden="true">download</span>
                     </button>
                 </div>
@@ -2003,14 +2009,14 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                         <div class="sectionTitleContainer sectionTitleContainer-cards padded-left">
                             <h2 class="sectionTitle sectionTitle-cards">${safeTitle}</h2>
                         </div>
-                        <div class="seerrfin-empty-row padded-left">No items to show</div>
+                        <div class="seerrfin-empty-row padded-left">${window.seerrFinI18n.t('tabs.noItemsToShow')}</div>
                     </div>
                 `);
             }
 
             const viewMoreBtn = path && items.length > 0 ? `
                 <button type="button" class="seerrfin-view-more" data-path="${this.escapeHtml(path)}" data-title="${safeTitle}">
-                    View more \u2192
+                    ${this.escapeHtml(window.seerrFinI18n.t('tabs.viewMore'))} \u2192
                 </button>
             ` : '';
 
@@ -2230,7 +2236,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                         <div class="sectionTitleContainer sectionTitleContainer-cards padded-left">
                             <h2 class="sectionTitle sectionTitle-cards">${safeTitle}</h2>
                         </div>
-                        <div class="seerrfin-empty-row padded-left">No items to show</div>
+                        <div class="seerrfin-empty-row padded-left">${window.seerrFinI18n.t('tabs.noItemsToShow')}</div>
                     </div>
                 `);
             }
@@ -2262,7 +2268,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
 
         createBoxCard: function (item, mediaType, kind) {
             const id = item.id;
-            const name = item.name || 'Unknown';
+            const name = item.name || window.seerrFinI18n.t('common.unknown');
             const safeName = this.escapeHtml(name);
             const showLogo = this.shouldShowLogo(kind);
             const logoStyleKey = kind === 'provider' ? 'streamingService' : (kind === 'studio' || kind === 'network' ? 'studioNetwork' : null);
@@ -2373,8 +2379,9 @@ if (typeof window.seerrFinPlugin === 'undefined') {
 
         renderDiscoveryDownloadDetails: function (item) {
             const label = item.mediaStatusLabel || '';
+            const translatedLabel = label ? window.seerrFinI18n.tMediaStatusLabel(label) : '';
             const chip = label && label.toLowerCase() !== 'unknown' ?
-                `<span class="seerrfin-request-chip ${this.getMediaStatusChipClass(label)}">${this.escapeHtml(label)}</span>` : '';
+                `<span class="seerrfin-request-chip ${this.getMediaStatusChipClass(label)}">${this.escapeHtml(translatedLabel)}</span>` : '';
 
             if (item.downloadPercent == null) { return chip; }
 
@@ -2383,7 +2390,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
             if (percent === 100) { return chip; }
 
             return `${chip}
-                <div class="seerrfin-discover-download-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" aria-label="Downloading">
+                <div class="seerrfin-discover-download-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" aria-label="${this.escapeHtml(window.seerrFinI18n.t('tabs.downloading'))}">
                     <div class="seerrfin-discover-download-track" aria-hidden="true">
                         <div class="seerrfin-discover-download-fill" style="width:${percent}%"></div>
                     </div>
@@ -3291,7 +3298,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
             return `
                 <div class="seerrfin-grid-view" data-seerrfin-grid-view="true" data-grid-shell="legacy">
                     <div class="seerrfin-grid-header padded-left padded-right">
-                        <button type="button" class="seerrfin-grid-back paper-icon-button-light emby-button" title="Back" aria-label="Back" data-grid-nav="back">
+                        <button type="button" class="seerrfin-grid-back paper-icon-button-light emby-button" title="${this.escapeHtml(window.seerrFinI18n.t('nativeui.back'))}" aria-label="${this.escapeHtml(window.seerrFinI18n.t('nativeui.back'))}" data-grid-nav="back">
                             <span class="material-icons" aria-hidden="true">arrow_back</span>
                         </button>
                         <h2 class="seerrfin-grid-title sectionTitle sectionTitle-cards"></h2>
@@ -3300,7 +3307,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                         <div is="emby-itemscontainer" class="itemsContainer padded-left padded-right vertical-wrap focuscontainer-x" data-monitor="videoplayback,markplayed"></div>
                     </div>
                     <div data-seerrfin-loadmore style="display:none" class="seerrfin-grid-loadmore">
-                        <button type="button" class="raised emby-button">Load more</button>
+                        <button type="button" class="raised emby-button">${this.escapeHtml(window.seerrFinI18n.t('common.loadMore'))}</button>
                     </div>
                     <div data-seerrfin-status style="display:none" class="seerrfin-grid-status"></div>
                 </div>
@@ -3486,10 +3493,10 @@ if (typeof window.seerrFinPlugin === 'undefined') {
             gridView.dataset.loading = 'true';
 
             if (isInitial) {
-                status.textContent = 'Loading...';
+                status.textContent = window.seerrFinI18n.t('common.loadingEllipsis');
                 status.style.display = '';
             } else {
-                loadMoreBtn.textContent = 'Loading...';
+                loadMoreBtn.textContent = window.seerrFinI18n.t('common.loadingEllipsis');
                 loadMoreBtn.disabled = true;
             }
 
@@ -3502,7 +3509,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                 status.style.display = 'none';
 
                 if (!result.items.length && loadedCount === 0) {
-                    itemsContainer.innerHTML = `<div class="seerrfin-empty-row">No items to show</div>`;
+                    itemsContainer.innerHTML = `<div class="seerrfin-empty-row">${window.seerrFinI18n.t('tabs.noItemsToShow')}</div>`;
                     loadMore.style.display = 'none';
 
                     if (useNativeCards) {
@@ -3538,7 +3545,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
                 const hasMore = result.items.length === pageSize &&
                     (total === 0 || newCount < total);
                 loadMore.style.display = hasMore ? '' : 'none';
-                loadMoreBtn.textContent = 'Load more';
+                loadMoreBtn.textContent = window.seerrFinI18n.t('common.loadMore');
                 loadMoreBtn.disabled = false;
 
                 if (useNativeCards) {
@@ -3553,12 +3560,12 @@ if (typeof window.seerrFinPlugin === 'undefined') {
 
                 gridView.dataset.loading = 'false';
                 status.style.display = 'none';
-                loadMoreBtn.textContent = 'Load more';
+                loadMoreBtn.textContent = window.seerrFinI18n.t('common.loadMore');
                 loadMoreBtn.disabled = false;
                 log.error('grid load failed for ' + path, err);
 
                 if (loadedCount === 0) {
-                    itemsContainer.innerHTML = `<div class="seerrfin-empty-row">Failed to load items.</div>`;
+                    itemsContainer.innerHTML = `<div class="seerrfin-empty-row">${window.seerrFinI18n.t('tabs.failedToLoadItems')}</div>`;
                 }
 
                 if (useNativeCards) {
@@ -3677,7 +3684,7 @@ if (typeof window.seerrFinPlugin === 'undefined') {
 
         showSearchSkeleton: function (searchPage) {
             this.removeSearchSection();
-            const skeleton = this.buildRowSkeleton('Seerr results', 'poster', { native: this.shouldUseNativeSearchResults() });
+            const skeleton = this.buildRowSkeleton(window.seerrFinI18n.t('section.seerrResults'), 'poster', { native: this.shouldUseNativeSearchResults() });
             skeleton.classList.add('seerrfin-search-section');
             this.insertSearchSection(searchPage, skeleton);
         },
@@ -3766,14 +3773,14 @@ if (typeof window.seerrFinPlugin === 'undefined') {
             const section = useNativeCards ?
                 this.mountFromHtml(`
                     <div class="verticalSection seerrfin-poster-section seerrfin-search-section seerrfin-section-fadein" data-query="${safeQuery}">
-                        <h2 class="sectionTitle sectionTitle-cards focuscontainer-x padded-left padded-right">Seerr results</h2>
+                        <h2 class="sectionTitle sectionTitle-cards focuscontainer-x padded-left padded-right">${this.escapeHtml(window.seerrFinI18n.t('section.seerrResults'))}</h2>
                         <div is="emby-itemscontainer" class="itemsContainer scrollSlider focuscontainer-x animatedScrollX" data-monitor="videoplayback,markplayed"></div>
                     </div>
                 `) :
                 this.mountFromHtml(`
                     <div class="verticalSection seerrfin-poster-section seerrfin-search-section seerrfin-section-fadein" data-query="${safeQuery}">
                         <div class="sectionTitleContainer sectionTitleContainer-cards padded-left">
-                            <h2 class="sectionTitle sectionTitle-cards">Seerr results</h2>
+                            <h2 class="sectionTitle sectionTitle-cards">${this.escapeHtml(window.seerrFinI18n.t('section.seerrResults'))}</h2>
                         </div>
                         <div is="emby-itemscontainer" class="itemsContainer scrollSlider focuscontainer-x"></div>
                     </div>

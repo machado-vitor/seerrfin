@@ -45,6 +45,14 @@ public class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public string ForceLocale { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets per-device playback defaults for the web client, as JSON:
+    /// [{"match":"Web0S|SmartTV","maxBitrate":30000000}]. "match" is a case-insensitive
+    /// regex tested against navigator.userAgent. Applied once per device (the user can
+    /// still change it in Settings > Playback afterwards). Empty disables the feature.
+    /// </summary>
+    public string DeviceDefaultsJson { get; set; } = string.Empty;
+
     public bool StreamingServiceUseImages { get; set; } = true;
 
     public bool StudioNetworkUseImages { get; set; } = true;

@@ -103,8 +103,13 @@ public static class TransformationPatches
               // jellyfin-web reads <html data-culture> before falling back to navigator.language,
               // so this also pins the native UI language for devices that never picked one.
               + "document.documentElement.setAttribute('data-culture',window.seerrFinForcedLocale);</script>";
+        string deviceDefaults = (config.DeviceDefaultsJson ?? string.Empty).Trim();
+        string deviceDefaultsScript = string.IsNullOrEmpty(deviceDefaults)
+            ? string.Empty
+            : $"<script src=\"../SeerrFin/seerrfin-device-defaults.js{cacheParam}\"></script>";
         string scripts =
             localeScript
+            + deviceDefaultsScript
             // i18n must load first so every other injected script can call window.seerrFinI18n.t(...)
             + $"<script src=\"../SeerrFin/seerrfin-i18n.js{cacheParam}\"></script>"
             + $"<script defer src=\"../SeerrFin/seerrfin-modal.js{cacheParam}\"></script>"

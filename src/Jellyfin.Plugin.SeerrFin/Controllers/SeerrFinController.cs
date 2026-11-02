@@ -92,6 +92,22 @@ public class SeerrFinController : ControllerBase
     [Produces("application/javascript")]
     public ActionResult GetI18nScript() => ServeEmbedded("Inject.seerrfin-i18n.js", "application/javascript");
 
+    [HttpGet("seerrfin-device-defaults.js")]
+    [Produces("application/javascript")]
+    public ActionResult GetDeviceDefaultsScript()
+    {
+        var config = SeerrFinPlugin.Instance.Configuration;
+        string rules = string.IsNullOrWhiteSpace(config.DeviceDefaultsJson) ? "[]" : config.DeviceDefaultsJson.Trim();
+        string js = "(function(){try{var rules=" + rules + ";var ua=navigator.userAgent||'';"
+            + "var stamp='seerrfin-device-defaults';var applied=localStorage.getItem(stamp)||'';"
+            + "for(var i=0;i<rules.length;i++){var r=rules[i];if(!r||!r.match)continue;"
+            + "var key=r.match+'|'+(r.maxBitrate||0);if(applied.indexOf(key)>=0)continue;"
+            + "if(!new RegExp(r.match,'i').test(ua))continue;"
+            + "if(r.maxBitrate){['true','false'].forEach(function(n){localStorage.setItem('maxbitrate-Video-'+n,String(r.maxBitrate));localStorage.setItem('enableautobitratebitrate-Video-'+n,'false');});}"
+            + "localStorage.setItem(stamp,applied+key+';');}}catch(e){}})();";
+        return Content(js, "application/javascript");
+    }
+
     [HttpGet("seerrfin-tabs.js")]
     [Produces("application/javascript")]
     public ActionResult GetScript() => ServeEmbedded("Inject.seerrfin-tabs.js", "application/javascript");

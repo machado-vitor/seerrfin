@@ -784,6 +784,9 @@
     };
 
     function detectLocale() {
+        // 0. Admin-forced locale (plugin setting), injected inline by the server before this script.
+        if (window.seerrFinForcedLocale) return String(window.seerrFinForcedLocale);
+
         try {
             // 1. Jellyfin user display language, when the web client already resolved it.
             const userSettings = window.ApiClient && typeof ApiClient.getCurrentUserId === 'function'

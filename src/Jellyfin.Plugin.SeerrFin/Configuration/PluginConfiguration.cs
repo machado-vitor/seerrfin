@@ -39,6 +39,12 @@ public class PluginConfiguration : BasePluginConfiguration
 
     public int CacheBustCounter { get; set; }
 
+    /// <summary>
+    /// Gets or sets the UI locale forced for every user (e.g. "pt-BR").
+    /// Empty means auto-detect from the Jellyfin user / browser language.
+    /// </summary>
+    public string ForceLocale { get; set; } = string.Empty;
+
     public bool StreamingServiceUseImages { get; set; } = true;
 
     public bool StudioNetworkUseImages { get; set; } = true;

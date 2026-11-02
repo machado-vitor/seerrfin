@@ -99,7 +99,10 @@ public static class TransformationPatches
         string forcedLocale = (config.ForceLocale ?? string.Empty).Trim();
         string localeScript = string.IsNullOrEmpty(forcedLocale)
             ? string.Empty
-            : $"<script>window.seerrFinForcedLocale={System.Text.Json.JsonSerializer.Serialize(forcedLocale)};</script>";
+            : $"<script>window.seerrFinForcedLocale={System.Text.Json.JsonSerializer.Serialize(forcedLocale)};"
+              // jellyfin-web reads <html data-culture> before falling back to navigator.language,
+              // so this also pins the native UI language for devices that never picked one.
+              + "document.documentElement.setAttribute('data-culture',window.seerrFinForcedLocale);</script>";
         string scripts =
             localeScript
             // i18n must load first so every other injected script can call window.seerrFinI18n.t(...)
